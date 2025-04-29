@@ -14,6 +14,7 @@
             --dark-gray: #495057;
             --success-color: #28a745;
             --warning-color: #ffc107;
+            --danger-color: #dc3545;
         }
         
         * {
@@ -48,14 +49,25 @@
         
         .welcome-header {
             margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
         }
         
-        .welcome-header h1 {
+        .store-logo {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 2px solid var(--primary-color);
+        }
+        
+        .welcome-text h1 {
             color: var(--primary-color);
             font-size: 24px;
         }
         
-        .welcome-header p {
+        .welcome-text p {
             color: var(--dark-gray);
             font-size: 14px;
         }
@@ -157,6 +169,10 @@
             font-weight: 500;
         }
         
+        .menu-item .availability.unavailable {
+            color: var(--danger-color);
+        }
+        
         .add-btn {
             background-color: var(--primary-color);
             color: white;
@@ -171,6 +187,11 @@
         
         .add-btn:hover {
             background-color: #3a5bd9;
+        }
+        
+        .add-btn:disabled {
+            background-color: var(--light-gray);
+            cursor: not-allowed;
         }
         
         /* Order Section */
@@ -227,6 +248,28 @@
             border: 1px solid var(--light-gray);
             border-radius: 5px;
             margin-bottom: 15px;
+        }
+        
+        .order-type {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .order-type-btn {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid var(--light-gray);
+            border-radius: 5px;
+            background-color: white;
+            cursor: pointer;
+            text-align: center;
+        }
+        
+        .order-type-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
         }
         
         .order-items {
@@ -485,10 +528,52 @@
             background-color: var(--light-gray);
         }
         
+        /* Keypad Modal */
+        .keypad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .keypad-btn {
+            padding: 15px;
+            font-size: 18px;
+            border: 1px solid var(--light-gray);
+            border-radius: 5px;
+            background-color: white;
+            cursor: pointer;
+            text-align: center;
+        }
+        
+        .keypad-btn:hover {
+            background-color: var(--light-gray);
+        }
+        
+        .keypad-btn.clear {
+            grid-column: span 2;
+            background-color: var(--danger-color);
+            color: white;
+        }
+        
+        .keypad-btn.enter {
+            background-color: var(--success-color);
+            color: white;
+        }
+        
         /* Receipt Modal */
         .receipt-header {
             text-align: center;
             margin-bottom: 20px;
+        }
+        
+        .receipt-logo {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-bottom: 10px;
+            border: 2px solid var(--primary-color);
         }
         
         .receipt-header h2 {
@@ -673,13 +758,19 @@
             cursor: pointer;
         }
         
-        .date-selector {
+        .report-filters {
             display: flex;
+            flex-wrap: wrap;
             gap: 10px;
             margin-bottom: 20px;
         }
         
-        .date-input {
+        .date-selector {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .date-input, .report-select {
             padding: 8px;
             border: 1px solid var(--light-gray);
             border-radius: 5px;
@@ -687,6 +778,15 @@
         
         .generate-btn {
             background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .export-btn {
+            background-color: var(--success-color);
             color: white;
             border: none;
             padding: 8px 15px;
@@ -735,37 +835,272 @@
             font-weight: bold;
             color: var(--primary-color);
         }
+        
+        /* Settings Modal */
+        .settings-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .settings-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 500px;
+            max-width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .settings-tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        .settings-tab {
+            padding: 10px 15px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+        }
+        
+        .settings-tab.active {
+            border-bottom: 2px solid var(--primary-color);
+            font-weight: bold;
+        }
+        
+        .settings-section {
+            display: none;
+        }
+        
+        .settings-section.active {
+            display: block;
+        }
+        
+        .user-list {
+            margin-bottom: 20px;
+        }
+        
+        .user-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        .user-actions {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .user-action-btn {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        
+        .edit-user-btn {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .delete-user-btn {
+            background-color: var(--danger-color);
+            color: white;
+        }
+        
+        .backup-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .backup-btn {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .export-backup-btn {
+            background-color: var(--success-color);
+            color: white;
+        }
+        
+        .import-backup-btn {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .reset-btn {
+            background-color: var(--danger-color);
+            color: white;
+        }
+        
+        /* Login Modal */
+        .login-modal {
+            display: flex;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1001;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .login-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            width: 400px;
+            max-width: 90%;
+        }
+        
+        .login-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .login-header h2 {
+            color: var(--primary-color);
+        }
+        
+        .login-form .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .login-btn {
+            width: 100%;
+            padding: 10px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        
+        /* Notification */
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            animation: slideIn 0.3s, fadeOut 0.5s 2.5s forwards;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+        
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+        
+        /* Responsive styles */
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+                height: auto;
+            }
+            
+            .menu-section, .order-section {
+                min-height: 50vh;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .menu-items {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+            
+            .summary-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .report-filters {
+                flex-direction: column;
+            }
+            
+            .date-selector {
+                flex-direction: column;
+            }
+        }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <div class="nav-bar">
-        <div class="nav-title">Restaurant POS</div>
-        <div class="nav-buttons">
-            <button class="nav-btn" id="newOrderBtn">New Order</button>
-            <button class="nav-btn" id="manageItemsBtn">Manage Items</button>
-            <button class="nav-btn" id="reportsBtn">Sales Reports</button>
+    <div class="login-modal" id="loginModal">
+        <div class="login-content">
+            <div class="login-header">
+                <h2 data-i18n="login_title">Restaurant POS Login</h2>
+            </div>
+            <form class="login-form" id="loginForm">
+                <div class="form-group">
+                    <label for="username" data-i18n="username">Username</label>
+                    <input type="text" id="username" placeholder="Enter username">
+                </div>
+                <div class="form-group">
+                    <label for="password" data-i18n="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter password">
+                </div>
+                <button type="submit" class="login-btn" data-i18n="login">Login</button>
+            </form>
         </div>
     </div>
     
-    <div class="container">
+    <div class="nav-bar" id="navBar" style="display: none;">
+        <div class="nav-title" data-i18n="restaurant_pos">Restaurant POS</div>
+        <div class="nav-buttons">
+            <button class="nav-btn" id="newOrderBtn" data-i18n="new_order">New Order</button>
+            <button class="nav-btn" id="reportsBtn" data-i18n="sales_reports">Sales Reports</button>
+            <button class="nav-btn" id="settingsBtn" data-i18n="settings">Settings</button>
+            <button class="nav-btn" id="logoutBtn" data-i18n="logout">Logout</button>
+        </div>
+    </div>
+    
+    <div class="container" id="mainContainer" style="display: none;">
         <div class="menu-section">
             <div class="welcome-header">
-                <h1>Welcome, Haty</h1>
-                <p>Welcome to system POS</p>
+                <img src="" class="store-logo" id="storeLogo" alt="Store Logo">
+                <div class="welcome-text">
+                    <h1 data-i18n="welcome">Welcome, <span id="userName">User</span></h1>
+                    <p data-i18n="welcome_message">Welcome to system POS</p>
+                </div>
             </div>
             
             <div class="search-bar">
-                <input type="text" id="searchInput" placeholder="Search items...">
+                <input type="text" id="searchInput" data-i18n-placeholder="search_items" placeholder="Search items...">
                 <i class="fas fa-search"></i>
             </div>
             
-            <h2>All items</h2>
+            <h2 data-i18n="all_items">All items</h2>
             <div class="category-tabs">
-                <div class="category-tab active" data-category="all">All</div>
-                <div class="category-tab" data-category="food">Food</div>
-                <div class="category-tab" data-category="drinks">Drinks</div>
-                <div class="category-tab" data-category="desserts">Desserts</div>
+                <div class="category-tab active" data-category="all" data-i18n="all">All</div>
+                <div class="category-tab" data-category="food" data-i18n="food">Food</div>
+                <div class="category-tab" data-category="drinks" data-i18n="drinks">Drinks</div>
+                <div class="category-tab" data-category="desserts" data-i18n="desserts">Desserts</div>
             </div>
             
             <div class="menu-items" id="menuItems">
@@ -775,27 +1110,32 @@
         
         <div class="order-section">
             <div class="order-header">
-                <h2>Order #<span id="orderNumber">654</span></h2>
-                <button class="edit-btn" id="editOrderBtn"><i class="fas fa-edit"></i> Edit</button>
+                <h2 data-i18n="order">Order #<span id="orderNumber">654</span></h2>
+                <button class="edit-btn" id="editOrderBtn"><i class="fas fa-edit"></i> <span data-i18n="edit">Edit</span></button>
             </div>
             
             <div class="order-details">
                 <div class="order-info">
-                    <h3>Customer Information</h3>
+                    <h3 data-i18n="customer_info">Customer Information</h3>
                     <select class="customer-select" id="customerSelect">
-                        <option value="">Select Customer</option>
-                        <option value="walk-in">Walk-in Customer</option>
+                        <option value="" data-i18n="select_customer">Select Customer</option>
+                        <option value="walk-in" data-i18n="walk_in">Walk-in Customer</option>
                         <option value="john">Pisith (VIP)</option>
                         <option value="jane">Bora</option>
                     </select>
                     
+                    <div class="order-type">
+                        <button class="order-type-btn active" data-type="dine-in" id="dineInBtn" data-i18n="dine_in">Dine In</button>
+                        <button class="order-type-btn" data-type="takeaway" id="takeawayBtn" data-i18n="takeaway">Takeaway</button>
+                    </div>
+                    
                     <select class="customer-select" id="tableSelect">
-                        <option value="">Select Table</option>
-                        <option value="1">Table 1</option>
-                        <option value="2">Table 2</option>
-                        <option value="3">Table 3</option>
-                        <option value="4">Table 4</option>
-                        <option value="5">Table 5</option>
+                        <option value="" data-i18n="select_table">Select Table</option>
+                        <option value="1" data-i18n="table">Table 1</option>
+                        <option value="2" data-i18n="table">Table 2</option>
+                        <option value="3" data-i18n="table">Table 3</option>
+                        <option value="4" data-i18n="table">Table 4</option>
+                        <option value="5" data-i18n="table">Table 5</option>
                     </select>
                 </div>
                 
@@ -804,40 +1144,40 @@
                 </div>
                 
                 <div class="discount-section">
-                    <h3>Add Discount</h3>
+                    <h3 data-i18n="add_discount">Add Discount</h3>
                     <div class="discount-type">
-                        <button class="discount-type-btn active" data-type="amount">Amount ($)</button>
-                        <button class="discount-type-btn" data-type="percentage">Percentage (%)</button>
+                        <button class="discount-type-btn active" data-type="amount" data-i18n="amount">Amount ($)</button>
+                        <button class="discount-type-btn" data-type="percentage" data-i18n="percentage">Percentage (%)</button>
                     </div>
                     <div class="discount-options">
                         <div class="discount-input">
-                            <input type="number" id="discountValue" placeholder="Discount value">
+                            <input type="number" id="discountValue" data-i18n-placeholder="discount_value" placeholder="Discount value">
                         </div>
-                        <button class="apply-btn" id="applyDiscount">Apply</button>
+                        <button class="apply-btn" id="applyDiscount" data-i18n="apply">Apply</button>
                     </div>
-                    <textarea id="orderNote" placeholder="Note" style="width: 100%; margin-top: 10px; padding: 10px; border: 1px solid #e9ecef; border-radius: 5px; min-height: 60px;"></textarea>
+                    <textarea id="orderNote" data-i18n-placeholder="note" placeholder="Note" style="width: 100%; margin-top: 10px; padding: 10px; border: 1px solid #e9ecef; border-radius: 5px; min-height: 60px;"></textarea>
                 </div>
                 
                 <div class="totals">
                     <div class="total-row">
-                        <span>Subtotal</span>
+                        <span data-i18n="subtotal">Subtotal</span>
                         <span id="subtotal">$0.00</span>
                     </div>
                     <div class="total-row">
-                        <span>Discount</span>
+                        <span data-i18n="discount">Discount</span>
                         <span id="discount">-$0.00</span>
                     </div>
                     <div class="total-row">
-                        <span>Tax (10%)</span>
+                        <span data-i18n="tax">Tax (10%)</span>
                         <span id="tax">$0.00</span>
                     </div>
                     <div class="total-row">
-                        <span>Total</span>
+                        <span data-i18n="total">Total</span>
                         <span id="total">$0.00</span>
                     </div>
                 </div>
                 
-                <button class="payment-btn" id="paymentBtn">Continue To Payment</button>
+                <button class="payment-btn" id="paymentBtn" data-i18n="continue_to_payment">Continue To Payment</button>
             </div>
         </div>
     </div>
@@ -846,43 +1186,78 @@
     <div class="modal" id="paymentModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Payment Method</h2>
+                <h2 data-i18n="payment_method">Payment Method</h2>
             </div>
             
             <div class="payment-methods">
-                <div class="payment-method" data-method="cash">
+                <div class="payment-method selected" data-method="cash">
                     <input type="radio" name="paymentMethod" id="cashMethod" checked>
-                    <label for="cashMethod">Cash</label>
+                    <label for="cashMethod" data-i18n="cash">Cash</label>
                 </div>
                 <div class="payment-method" data-method="card">
                     <input type="radio" name="paymentMethod" id="cardMethod">
-                    <label for="cardMethod">Bank Transfer</label>
+                    <label for="cardMethod" data-i18n="bank_transfer">Bank Transfer</label>
                 </div>
                 <div class="payment-method" data-method="mixed">
                     <input type="radio" name="paymentMethod" id="mixedMethod">
-                    <label for="mixedMethod">Mixed Payment</label>
+                    <label for="mixedMethod" data-i18n="mixed_payment">Mixed Payment</label>
                 </div>
             </div>
             
             <div class="payment-amounts" id="paymentAmounts">
                 <div class="payment-amount">
-                    <label for="amountPaid">Amount Paid</label>
-                    <input type="number" id="amountPaid" placeholder="Enter amount">
+                    <label for="amountPaid" data-i18n="amount_paid">Amount Paid</label>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="number" id="amountPaid" data-i18n-placeholder="enter_amount" placeholder="Enter amount" readonly>
+                        <button class="keypad-btn" id="openKeypadBtn"><i class="fas fa-keyboard"></i></button>
+                    </div>
                 </div>
                 
                 <div class="payment-amount" id="cardAmountContainer" style="display: none;">
-                    <label for="cardAmount">Bank Transfer Amount</label>
-                    <input type="number" id="cardAmount" placeholder="Enter amount">
+                    <label for="cardAmount" data-i18n="bank_transfer_amount">Bank Transfer Amount</label>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="number" id="cardAmount" data-i18n-placeholder="enter_amount" placeholder="Enter amount" readonly>
+                        <button class="keypad-btn" id="openKeypadBtn2"><i class="fas fa-keyboard"></i></button>
+                    </div>
                 </div>
                 
                 <div class="change-amount" id="changeAmount">
-                    Change: $0.00
+                    <span data-i18n="change">Change</span>: $0.00
                 </div>
             </div>
             
             <div class="modal-buttons">
-                <button class="modal-btn confirm-btn" id="confirmPayment">Confirm Payment</button>
-                <button class="modal-btn cancel-btn" id="cancelPayment">Cancel</button>
+                <button class="modal-btn confirm-btn" id="confirmPayment" data-i18n="confirm_payment">Confirm Payment</button>
+                <button class="modal-btn cancel-btn" id="cancelPayment" data-i18n="cancel">Cancel</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Keypad Modal -->
+    <div class="modal" id="keypadModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 data-i18n="enter_amount">Enter Amount</h2>
+            </div>
+            
+            <div class="form-group">
+                <input type="text" id="keypadInput" style="font-size: 24px; text-align: right;" readonly>
+            </div>
+            
+            <div class="keypad">
+                <button class="keypad-btn" data-value="1">1</button>
+                <button class="keypad-btn" data-value="2">2</button>
+                <button class="keypad-btn" data-value="3">3</button>
+                <button class="keypad-btn" data-value="4">4</button>
+                <button class="keypad-btn" data-value="5">5</button>
+                <button class="keypad-btn" data-value="6">6</button>
+                <button class="keypad-btn" data-value="7">7</button>
+                <button class="keypad-btn" data-value="8">8</button>
+                <button class="keypad-btn" data-value="9">9</button>
+                <button class="keypad-btn" data-value=".">.</button>
+                <button class="keypad-btn" data-value="0">0</button>
+                <button class="keypad-btn clear" id="keypadClear" data-i18n="clear">Clear</button>
+                <button class="keypad-btn enter" id="keypadEnter" data-i18n="enter">Enter</button>
             </div>
         </div>
     </div>
@@ -891,8 +1266,9 @@
     <div class="modal" id="receiptModal">
         <div class="modal-content">
             <div class="receipt-header">
-                <h2>Restaurant POS</h2>
-                <p>Order #<span id="receiptOrderNumber">1</span></p>
+                <img src="" class="receipt-logo" id="receiptLogo" alt="Store Logo">
+                <h2 data-i18n="restaurant_pos">Restaurant POS</h2>
+                <p data-i18n="order">Order #<span id="receiptOrderNumber">1</span></p>
                 <p id="receiptDate">Sunday, 05 Jan, 2025</p>
             </div>
             
@@ -901,63 +1277,8 @@
             </div>
             
             <div class="modal-buttons">
-                <button class="modal-btn print-btn" id="printReceipt">Print Receipt</button>
-                <button class="modal-btn close-btn" id="closeReceipt">Close</button>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Item Management Modal -->
-    <div class="item-management-modal" id="itemManagementModal">
-        <div class="item-management-content">
-            <div class="modal-header">
-                <h2 id="itemModalTitle">Add New Item</h2>
-            </div>
-            
-            <div class="form-group">
-                <label for="itemName">Item Name</label>
-                <input type="text" id="itemName" placeholder="Enter item name">
-            </div>
-            
-            <div class="form-group">
-                <label for="itemCategory">Category</label>
-                <select id="itemCategory">
-                    <option value="food">Food</option>
-                    <option value="drinks">Drinks</option>
-                    <option value="desserts">Desserts</option>
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <label for="itemPrice">Price</label>
-                <input type="number" id="itemPrice" placeholder="Enter price" step="0.01">
-            </div>
-            
-            <div class="form-group">
-                <label for="itemDescription">Description</label>
-                <textarea id="itemDescription" placeholder="Enter description"></textarea>
-            </div>
-            
-            <div class="image-upload">
-                <div class="image-preview" id="imagePreview">
-                    <i class="fas fa-image" style="font-size: 40px; color: #ccc;"></i>
-                </div>
-                <input type="file" id="itemImage" accept="image/*" style="display: none;">
-                <button class="upload-btn" id="uploadImageBtn">Upload Image</button>
-            </div>
-            
-            <div class="form-group">
-                <label for="itemAvailability">Availability</label>
-                <select id="itemAvailability">
-                    <option value="true">Available</option>
-                    <option value="false">Not Available</option>
-                </select>
-            </div>
-            
-            <div class="form-actions">
-                <button class="modal-btn cancel-btn" id="cancelItem">Cancel</button>
-                <button class="modal-btn confirm-btn" id="saveItem">Save Item</button>
-                <button class="modal-btn" id="deleteItem" style="background-color: var(--accent-color); color: white; display: none;">Delete Item</button>
+                <button class="modal-btn print-btn" id="printReceipt" data-i18n="print_receipt">Print Receipt</button>
+                <button class="modal-btn close-btn" id="closeReceipt" data-i18n="close">Close</button>
             </div>
         </div>
     </div>
@@ -966,28 +1287,44 @@
     <div class="reports-modal" id="reportsModal">
         <div class="reports-content">
             <div class="reports-header">
-                <h2>Sales Reports</h2>
+                <h2 data-i18n="sales_reports">Sales Reports</h2>
                 <button class="close-reports" id="closeReports">&times;</button>
             </div>
             
-            <div class="date-selector">
-                <input type="date" class="date-input" id="startDate">
-                <span>to</span>
-                <input type="date" class="date-input" id="endDate">
-                <button class="generate-btn" id="generateReport">Generate</button>
+            <div class="report-filters">
+                <div class="date-selector">
+                    <input type="date" class="date-input" id="startDate">
+                    <span data-i18n="to">to</span>
+                    <input type="date" class="date-input" id="endDate">
+                </div>
+                
+                <select class="report-select" id="reportCategory">
+                    <option value="all" data-i18n="all_categories">All Categories</option>
+                    <option value="food" data-i18n="food">Food</option>
+                    <option value="drinks" data-i18n="drinks">Drinks</option>
+                    <option value="desserts" data-i18n="desserts">Desserts</option>
+                </select>
+                
+                <select class="report-select" id="reportItem">
+                    <option value="all" data-i18n="all_items">All Items</option>
+                    <!-- Items will be populated dynamically -->
+                </select>
+                
+                <button class="generate-btn" id="generateReport" data-i18n="generate">Generate</button>
+                <button class="export-btn" id="exportReport" data-i18n="export_csv">Export CSV</button>
             </div>
             
             <div class="summary-cards">
                 <div class="summary-card">
-                    <h3>Total Sales</h3>
+                    <h3 data-i18n="total_sales">Total Sales</h3>
                     <p id="totalSales">$0.00</p>
                 </div>
                 <div class="summary-card">
-                    <h3>Total Orders</h3>
+                    <h3 data-i18n="total_orders">Total Orders</h3>
                     <p id="totalOrders">0</p>
                 </div>
                 <div class="summary-card">
-                    <h3>Average Order</h3>
+                    <h3 data-i18n="average_order">Average Order</h3>
                     <p id="averageOrder">$0.00</p>
                 </div>
             </div>
@@ -995,12 +1332,12 @@
             <table class="sales-table">
                 <thead>
                     <tr>
-                        <th>Order #</th>
-                        <th>Date</th>
-                        <th>Customer</th>
-                        <th>Payment Method</th>
-                        <th>Items</th>
-                        <th>Total</th>
+                        <th data-i18n="order">Order #</th>
+                        <th data-i18n="date">Date</th>
+                        <th data-i18n="customer">Customer</th>
+                        <th data-i18n="payment_method">Payment Method</th>
+                        <th data-i18n="items">Items</th>
+                        <th data-i18n="total">Total</th>
                     </tr>
                 </thead>
                 <tbody id="salesTableBody">
@@ -1008,51 +1345,713 @@
                 </tbody>
             </table>
             
-            <button class="modal-btn print-btn" id="printReport">Print Report</button>
+            <button class="modal-btn print-btn" id="printReport" data-i18n="print_report">Print Report</button>
+        </div>
+    </div>
+    
+    <!-- Settings Modal -->
+    <div class="settings-modal" id="settingsModal">
+        <div class="settings-content">
+            <div class="reports-header">
+                <h2 data-i18n="settings">Settings</h2>
+                <button class="close-reports" id="closeSettings">&times;</button>
+            </div>
+            
+            <div class="settings-tabs">
+                <div class="settings-tab active" data-tab="general" data-i18n="general">General</div>
+                <div class="settings-tab" data-tab="users" data-i18n="users">Users</div>
+                <div class="settings-tab" data-tab="backup" data-i18n="backup">Backup</div>
+            </div>
+            
+            <div class="settings-section active" id="generalSettings">
+                <div class="form-group">
+                    <label for="storeName" data-i18n="store_name">Store Name</label>
+                    <input type="text" id="storeName" placeholder="Enter store name">
+                </div>
+                
+                <div class="form-group">
+                    <label for="storeLogo" data-i18n="store_logo">Store Logo</label>
+                    <div class="image-upload">
+                        <div class="image-preview" id="logoPreview">
+                            <i class="fas fa-image" style="font-size: 40px; color: #ccc;"></i>
+                        </div>
+                        <input type="file" id="storeLogo" accept="image/*" style="display: none;">
+                        <button class="upload-btn" id="uploadLogoBtn" data-i18n="upload_image">Upload Image</button>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="languageSelect" data-i18n="language">Language</label>
+                    <select id="languageSelect">
+                        <option value="en" data-i18n="english">English</option>
+                        <option value="km" data-i18n="khmer">Khmer</option>
+                        <option value="zh" data-i18n="chinese">Chinese</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="taxRate" data-i18n="tax_rate">Tax Rate (%)</label>
+                    <input type="number" id="taxRate" min="0" max="100" step="0.1">
+                </div>
+                
+                <div class="form-actions">
+                    <button class="modal-btn cancel-btn" id="cancelSettings" data-i18n="cancel">Cancel</button>
+                    <button class="modal-btn confirm-btn" id="saveSettings" data-i18n="save">Save</button>
+                </div>
+            </div>
+            
+            <div class="settings-section" id="userSettings">
+                <div class="form-group">
+                    <button class="modal-btn confirm-btn" id="addUserBtn" data-i18n="add_user">Add User</button>
+                </div>
+                
+                <div class="user-list" id="userList">
+                    <!-- Users will be populated dynamically -->
+                </div>
+            </div>
+            
+            <div class="settings-section" id="backupSettings">
+                <div class="form-group">
+                    <h3 data-i18n="data_backup">Data Backup</h3>
+                    <p data-i18n="backup_description">Export or import your POS data for backup purposes.</p>
+                </div>
+                
+                <div class="backup-actions">
+                    <button class="backup-btn export-backup-btn" id="exportBackupBtn" data-i18n="export_backup">Export Backup</button>
+                    <button class="backup-btn import-backup-btn" id="importBackupBtn" data-i18n="import_backup">Import Backup</button>
+                    <input type="file" id="backupFile" accept=".json" style="display: none;">
+                </div>
+                
+                <div class="form-group" style="margin-top: 30px;">
+                    <h3 data-i18n="danger_zone">Danger Zone</h3>
+                    <p data-i18n="reset_warning">Warning: This will delete all data and cannot be undone.</p>
+                    <button class="backup-btn reset-btn" id="resetDataBtn" data-i18n="reset_data">Reset All Data</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- User Management Modal -->
+    <div class="item-management-modal" id="userModal">
+        <div class="item-management-content">
+            <div class="modal-header">
+                <h2 id="userModalTitle" data-i18n="add_user">Add User</h2>
+            </div>
+            
+            <div class="form-group">
+                <label for="userUsername" data-i18n="username">Username</label>
+                <input type="text" id="userUsername" data-i18n-placeholder="enter_username" placeholder="Enter username">
+            </div>
+            
+            <div class="form-group">
+                <label for="userPassword" data-i18n="password">Password</label>
+                <input type="password" id="userPassword" data-i18n-placeholder="enter_password" placeholder="Enter password">
+            </div>
+            
+            <div class="form-group">
+                <label for="userName" data-i18n="name">Name</label>
+                <input type="text" id="userName" data-i18n-placeholder="enter_name" placeholder="Enter name">
+            </div>
+            
+            <div class="form-group">
+                <label for="userRole" data-i18n="role">Role</label>
+                <select id="userRole">
+                    <option value="admin" data-i18n="admin">Admin</option>
+                    <option value="manager" data-i18n="manager">Manager</option>
+                    <option value="staff" data-i18n="staff">Staff</option>
+                </select>
+            </div>
+            
+            <div class="form-actions">
+                <button class="modal-btn cancel-btn" id="cancelUser" data-i18n="cancel">Cancel</button>
+                <button class="modal-btn confirm-btn" id="saveUser" data-i18n="save_user">Save User</button>
+                <button class="modal-btn" id="deleteUser" style="background-color: var(--accent-color); color: white; display: none;" data-i18n="delete_user">Delete User</button>
+            </div>
         </div>
     </div>
     
     <script>
-        // Sample menu data with images
-        let menuItems = [
-            { id: 1, name: "Chocolate Blueberry", description: "Dus sede lore dolor in reprehenderit dolore eu fugiat nulla pariatur.", price: 10.00, category: "desserts", available: true, image: "https://images.unsplash.com/photo-1571115177098-24ec42ed204d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" },
-            { id: 2, name: "Vanilla Chocolate", description: "Dus sede lore dolor in reprehenderit dolore eu fugiat nulla pariatur.", price: 10.00, category: "desserts", available: true, image: "https://images.unsplash.com/photo-1509482560494-4126f8225994?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" },
-            { id: 3, name: "Arnericano", description: "Dus sede lore dolor in reprehenderit orniquatisi velit nuis nostrud dolore eu fugiat nulla pariatur.", price: 5.00, category: "drinks", available: true, image: "https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" },
-            { id: 4, name: "Sweet Granulated Sugar Croissant", description: "Dus sede lore dolor in reprehenderit orniquatisi velit nuis nostrud dolore eu fugiat nulla pariatur.", price: 12.00, category: "desserts", available: true, image: "https://images.unsplash.com/photo-1552590635-27c2c2128abf?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" },
-            { id: 5, name: "Dryer and Vegetarian", description: "Dus sede lore dolor in reprehenderit orniquatisi velit nuis nostrud dolore eu fugiat nulla pariatur.", price: 40.00, category: "food", available: true, image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" },
-            { id: 6, name: "Chicken Noodles", description: "Dus sede lore dolor in reprehenderit orniquatisi velit nuis nostrud dolore eu fugiat nulla pariatur.", price: 42.00, category: "food", available: true, image: "https://images.unsplash.com/photo-1559847844-5315695dadae?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" },
-            { id: 7, name: "Burger Creamy Mushroom", description: "Dus sede lore dolor in reprehenderit orniquatisi velit nuis nostrud dolore eu fugiat nulla pariatur.", price: 45.00, category: "food", available: true, image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" },
-            { id: 8, name: "Pizza Sweet Corn", description: "Dus sede lore dolor in reprehenderit orniquatisi velit nuis nostrud dolore eu fugiat nulla pariatur.", price: 120.00, category: "food", available: true, image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" },
-            { id: 9, name: "Pure Tango Oil", description: "Dus sede lore dolor in reprehenderit orniquatisi velit nuis nostrud dolore eu fugiat nulla pariatur.", price: 150.00, category: "drinks", available: true, image: "https://images.unsplash.com/photo-1551029506-0807df4e2031?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" },
-            { id: 10, name: "Burger Spicy Tandoori", description: "Dus sede lore dolor in reprehenderit orniquatisi velit nuis nostrud dolore eu fugiat nulla pariatur.", price: 40.00, category: "food", available: true, image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" },
-            { id: 11, name: "Butter Crosstalk", description: "Dus sede lore dolor in reprehenderit orniquatisi velit nuis nostrud dolore eu fugiat nulla pariatur.", price: 40.00, category: "food", available: true, image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" },
-            { id: 12, name: "Pizza Tandoori Paneer", description: "Dus sede lore dolor in reprehenderit orniquatisi velit nuis nostrud dolore eu fugiat nulla pariatur.", price: 50.00, category: "food", available: true, image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" }
-        ];
+        // SQLite database using localStorage
+        class Database {
+            constructor() {
+                this.dbName = 'restaurant_pos_db';
+                this.initializeDB();
+            }
+            
+            initializeDB() {
+                if (!localStorage.getItem(this.dbName)) {
+                    const initialData = {
+                        menuItems: [
+                            { id: 1, name: "Chocolate Blueberry", description: "Delicious chocolate with blueberry flavor", price: 10.00, category: "desserts", available: true, image: "https://images.unsplash.com/photo-1571115177098-24ec42ed204d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" },
+                            { id: 2, name: "Vanilla Chocolate", description: "Vanilla flavored chocolate", price: 10.00, category: "desserts", available: true, image: "https://images.unsplash.com/photo-1509482560494-4126f8225994?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" },
+                            { id: 3, name: "Americano", description: "Classic Americano coffee", price: 5.00, category: "drinks", available: true, image: "https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" },
+                            { id: 4, name: "Sweet Granulated Sugar Croissant", description: "Sweet croissant with sugar", price: 12.00, category: "desserts", available: true, image: "https://images.unsplash.com/photo-1552590635-27c2c2128abf?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" },
+                            { id: 5, name: "Vegetarian Meal", description: "Healthy vegetarian dish", price: 40.00, category: "food", available: true, image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" },
+                            { id: 6, name: "Chicken Noodles", description: "Delicious chicken noodles", price: 42.00, category: "food", available: true, image: "https://images.unsplash.com/photo-1559847844-5315695dadae?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" },
+                            { id: 7, name: "Burger Creamy Mushroom", description: "Burger with creamy mushroom sauce", price: 45.00, category: "food", available: true, image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" },
+                            { id: 8, name: "Pizza Sweet Corn", description: "Pizza with sweet corn topping", price: 120.00, category: "food", available: true, image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" },
+                            { id: 9, name: "Pure Tango Oil", description: "Refreshing tango drink", price: 150.00, category: "drinks", available: true, image: "https://images.unsplash.com/photo-1551029506-0807df4e2031?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" },
+                            { id: 10, name: "Burger Spicy Tandoori", description: "Spicy tandoori burger", price: 40.00, category: "food", available: true, image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" }
+                        ],
+                        salesData: [
+                            { id: 1, orderNumber: 654, date: new Date().toISOString(), customer: "Walk-in", paymentMethod: "cash", items: ["Pizza Sweet Corn", "Chocolate Blueberry"], total: 130.00, itemsData: [{id: 8, quantity: 1}, {id: 1, quantity: 1}] },
+                            { id: 2, orderNumber: 653, date: new Date(Date.now() - 86400000).toISOString(), customer: "Pisith", paymentMethod: "card", items: ["Burger Creamy Mushroom", "Americano"], total: 50.00, itemsData: [{id: 7, quantity: 1}, {id: 3, quantity: 1}] },
+                            { id: 3, orderNumber: 652, date: new Date(Date.now() - 172800000).toISOString(), customer: "Bora", paymentMethod: "mixed", items: ["Chicken Noodles", "Vanilla Chocolate"], total: 52.00, itemsData: [{id: 6, quantity: 1}, {id: 2, quantity: 1}] }
+                        ],
+                        users: [
+                            { id: 1, username: "admin", password: "admin123", name: "Admin User", role: "admin" },
+                            { id: 2, username: "manager", password: "manager123", name: "Manager User", role: "manager" },
+                            { id: 3, username: "staff", password: "staff123", name: "Staff User", role: "staff" }
+                        ],
+                        settings: {
+                            storeName: "My Restaurant",
+                            storeLogo: "",
+                            taxRate: 10,
+                            language: 'en'
+                        }
+                    };
+                    localStorage.setItem(this.dbName, JSON.stringify(initialData));
+                }
+            }
+            
+            getData() {
+                return JSON.parse(localStorage.getItem(this.dbName));
+            }
+            
+            saveData(data) {
+                localStorage.setItem(this.dbName, JSON.stringify(data));
+            }
+            
+            getMenuItems() {
+                return this.getData().menuItems;
+            }
+            
+            getSalesData() {
+                return this.getData().salesData;
+            }
+            
+            getUsers() {
+                return this.getData().users;
+            }
+            
+            getSettings() {
+                return this.getData().settings;
+            }
+            
+            saveMenuItem(item) {
+                const data = this.getData();
+                if (item.id) {
+                    // Update existing item
+                    const index = data.menuItems.findIndex(i => i.id === item.id);
+                    if (index !== -1) {
+                        data.menuItems[index] = item;
+                    }
+                } else {
+                    // Add new item
+                    const newId = data.menuItems.length > 0 ? Math.max(...data.menuItems.map(i => i.id)) + 1 : 1;
+                    item.id = newId;
+                    data.menuItems.push(item);
+                }
+                this.saveData(data);
+                return item;
+            }
+            
+            deleteMenuItem(id) {
+                const data = this.getData();
+                data.menuItems = data.menuItems.filter(item => item.id !== id);
+                this.saveData(data);
+            }
+            
+            saveSale(sale) {
+                const data = this.getData();
+                if (sale.id) {
+                    // Update existing sale (not typically needed)
+                    const index = data.salesData.findIndex(s => s.id === sale.id);
+                    if (index !== -1) {
+                        data.salesData[index] = sale;
+                    }
+                } else {
+                    // Add new sale
+                    const newId = data.salesData.length > 0 ? Math.max(...data.salesData.map(s => s.id)) + 1 : 1;
+                    sale.id = newId;
+                    sale.orderNumber = this.generateOrderNumber();
+                    data.salesData.unshift(sale);
+                }
+                this.saveData(data);
+                return sale;
+            }
+            
+            generateOrderNumber() {
+                const data = this.getData();
+                if (data.salesData.length === 0) return 1000;
+                return Math.max(...data.salesData.map(sale => sale.orderNumber)) + 1;
+            }
+            
+            saveUser(user) {
+                const data = this.getData();
+                if (user.id) {
+                    // Update existing user
+                    const index = data.users.findIndex(u => u.id === user.id);
+                    if (index !== -1) {
+                        data.users[index] = user;
+                    }
+                } else {
+                    // Add new user
+                    const newId = data.users.length > 0 ? Math.max(...data.users.map(u => u.id)) + 1 : 1;
+                    user.id = newId;
+                    data.users.push(user);
+                }
+                this.saveData(data);
+                return user;
+            }
+            
+            deleteUser(id) {
+                const data = this.getData();
+                data.users = data.users.filter(user => user.id !== id);
+                this.saveData(data);
+            }
+            
+            updateSettings(settings) {
+                const data = this.getData();
+                data.settings = { ...data.settings, ...settings };
+                this.saveData(data);
+            }
+            
+            exportData() {
+                return JSON.stringify(this.getData());
+            }
+            
+            importData(jsonData) {
+                try {
+                    const data = JSON.parse(jsonData);
+                    localStorage.setItem(this.dbName, JSON.stringify(data));
+                    return true;
+                } catch (e) {
+                    console.error("Error importing data:", e);
+                    return false;
+                }
+            }
+            
+            resetData() {
+                localStorage.removeItem(this.dbName);
+                this.initializeDB();
+            }
+        }
+
+        // Language translations
+        const translations = {
+            en: {
+                login_title: "Restaurant POS Login",
+                username: "Username",
+                password: "Password",
+                login: "Login",
+                logout: "Logout",
+                restaurant_pos: "Restaurant POS",
+                new_order: "New Order",
+                manage_items: "Manage Items",
+                sales_reports: "Sales Reports",
+                settings: "Settings",
+                welcome: "Welcome,",
+                welcome_message: "Welcome to system POS",
+                search_items: "Search items...",
+                all_items: "All items",
+                all: "All",
+                food: "Food",
+                drinks: "Drinks",
+                desserts: "Desserts",
+                order: "Order #",
+                edit: "Edit",
+                customer_info: "Customer Information",
+                select_customer: "Select Customer",
+                walk_in: "Walk-in Customer",
+                select_table: "Select Table",
+                table: "Table",
+                dine_in: "Dine In",
+                takeaway: "Takeaway",
+                add_discount: "Add Discount",
+                amount: "Amount ($)",
+                percentage: "Percentage (%)",
+                discount_value: "Discount value",
+                apply: "Apply",
+                note: "Note",
+                subtotal: "Subtotal",
+                discount: "Discount",
+                tax: "Tax",
+                total: "Total",
+                continue_to_payment: "Continue To Payment",
+                payment_method: "Payment Method",
+                cash: "Cash",
+                bank_transfer: "Bank Transfer",
+                mixed_payment: "Mixed Payment",
+                amount_paid: "Amount Paid",
+                enter_amount: "Enter amount",
+                bank_transfer_amount: "Bank Transfer Amount",
+                change: "Change",
+                confirm_payment: "Confirm Payment",
+                cancel: "Cancel",
+                print_receipt: "Print Receipt",
+                close: "Close",
+                add_new_item: "Add New Item",
+                item_name: "Item Name",
+                enter_item_name: "Enter item name",
+                category: "Category",
+                price: "Price",
+                enter_price: "Enter price",
+                description: "Description",
+                enter_description: "Enter description",
+                upload_image: "Upload Image",
+                availability: "Availability",
+                available: "Available",
+                not_available: "Not Available",
+                save_item: "Save Item",
+                delete_item: "Delete Item",
+                total_sales: "Total Sales",
+                total_orders: "Total Orders",
+                average_order: "Average Order",
+                to: "to",
+                generate: "Generate",
+                export_csv: "Export CSV",
+                date: "Date",
+                customer: "Customer",
+                items: "Items",
+                print_report: "Print Report",
+                general: "General",
+                users: "Users",
+                backup: "Backup",
+                store_name: "Store Name",
+                store_logo: "Store Logo",
+                language: "Language",
+                english: "English",
+                khmer: "Khmer",
+                chinese: "Chinese",
+                tax_rate: "Tax Rate",
+                save: "Save",
+                add_user: "Add User",
+                name: "Name",
+                enter_name: "Enter name",
+                role: "Role",
+                admin: "Admin",
+                manager: "Manager",
+                staff: "Staff",
+                save_user: "Save User",
+                delete_user: "Delete User",
+                enter_username: "Enter username",
+                enter_password: "Enter password",
+                data_backup: "Data Backup",
+                backup_description: "Export or import your POS data for backup purposes.",
+                export_backup: "Export Backup",
+                import_backup: "Import Backup",
+                danger_zone: "Danger Zone",
+                reset_warning: "Warning: This will delete all data and cannot be undone.",
+                reset_data: "Reset All Data",
+                all_categories: "All Categories",
+                item_added: "Item added to order",
+                item_unavailable: "This item is currently not available",
+                select_table_first: "Please select a table for this order",
+                add_items_first: "Please add items to the order before proceeding to payment",
+                enter_valid_discount: "Please enter a valid discount value",
+                percentage_range: "Percentage discount must be between 0 and 100",
+                enter_amount_paid: "Please enter amount paid",
+                enter_card_amount: "Please enter bank transfer amount",
+                both_amounts: "Please enter amounts for both payment methods",
+                amount_less: "Amount paid is less than the total amount due",
+                confirm_delete: "Are you sure you want to delete this item?",
+                fill_required: "Please fill in all required fields",
+                clear: "Clear",
+                enter: "Enter",
+                enter_amount: "Enter Amount",
+                thank_you: "Thank you for your visit!",
+                paid: "Paid"
+            },
+            km: {
+                login_title: "ការចូលប្រព័ន្ធគ្រប់គ្រងហាងអាហារ",
+                username: "ឈ្មោះអ្នកប្រើប្រាស់",
+                password: "ពាក្យសម្ងាត់",
+                login: "ចូល",
+                logout: "ចាកចេញ",
+                restaurant_pos: "ប្រព័ន្ធគ្រប់គ្រងហាងអាហារ",
+                new_order: "ការកម្មង់ថ្មី",
+                manage_items: "គ្រប់គ្រងមុខម្ហូប",
+                sales_reports: "របាយការណ៍លក់",
+                settings: "ការកំណត់",
+                welcome: "សូមស្វាគមន៍,",
+                welcome_message: "សូមស្វាគមន៍មកកាន់ប្រព័ន្ធ POS",
+                search_items: "ស្វែងរកមុខម្ហូប...",
+                all_items: "មុខម្ហូបទាំងអស់",
+                all: "ទាំងអស់",
+                food: "ម្ហូប",
+                drinks: "ភេសជ្ជៈ",
+                desserts: "បង្អែម",
+                order: "ការកម្មង់ #",
+                edit: "កែសម្រួល",
+                customer_info: "ព័ត៌មានអតិថិជន",
+                select_customer: "ជ្រើសរើសអតិថិជន",
+                walk_in: "អតិថិជនដែលមកដល់ហាង",
+                select_table: "ជ្រើសរើសតុ",
+                table: "តុ",
+                dine_in: "អង្គុយក្នុងហាង",
+                takeaway: "យកទៅផ្ទះ",
+                add_discount: "បន្ថែមការបញ្ចុះតម្លៃ",
+                amount: "ចំនួនទឹកប្រាក់ ($)",
+                percentage: "ភាគរយ (%)",
+                discount_value: "តម្លៃបញ្ចុះតម្លៃ",
+                apply: "អនុវត្ត",
+                note: "កំណត់ចំណាំ",
+                subtotal: "សរុបរង",
+                discount: "បញ្ចុះតម្លៃ",
+                tax: "ពន្ធ",
+                total: "សរុប",
+                continue_to_payment: "បន្តទៅការទូទាត់",
+                payment_method: "វិធីសាបព្រោះ",
+                cash: "សាច់ប្រាក់",
+                bank_transfer: "ការផ្ទេរប្រាក់តាមធនាគារ",
+                mixed_payment: "ការទូទាត់ចម្រុះ",
+                amount_paid: "ចំនួនទឹកប្រាក់ដែលបានបង់",
+                enter_amount: "បញ្ចូលចំនួនទឹកប្រាក់",
+                bank_transfer_amount: "ចំនួនទឹកប្រាក់ផ្ទេរតាមធនាគារ",
+                change: "អាប់ដេវ",
+                confirm_payment: "បញ្ជាក់ការទូទាត់",
+                cancel: "បោះបង់",
+                print_receipt: "បោះពុម្ពបង្កាន់ដៃ",
+                close: "បិទ",
+                add_new_item: "បន្ថែមមុខម្ហូបថ្មី",
+                item_name: "ឈ្មោះមុខម្ហូប",
+                enter_item_name: "បញ្ចូលឈ្មោះមុខម្ហូប",
+                category: "ប្រភេទ",
+                price: "តម្លៃ",
+                enter_price: "បញ្ចូលតម្លៃ",
+                description: "ការពិពណ៌នា",
+                enter_description: "បញ្ចូលការពិពណ៌នា",
+                upload_image: "ផ្ទុករូបភាព",
+                availability: "ភាពអាចរកបាន",
+                available: "អាចរកបាន",
+                not_available: "មិនអាចរកបាន",
+                save_item: "រក្សាទុកមុខម្ហូប",
+                delete_item: "លុបមុខម្ហូប",
+                total_sales: "ការលក់សរុប",
+                total_orders: "ការកម្មង់សរុប",
+                average_order: "ការកម្មង់មធ្យម",
+                to: "ដល់",
+                generate: "បង្កើត",
+                export_csv: "នាំចេញ CSV",
+                date: "កាលបរិច្ឆេទ",
+                customer: "អតិថិជន",
+                items: "មុខម្ហូប",
+                print_report: "បោះពុម្ពរបាយការណ៍",
+                general: "ទូទៅ",
+                users: "អ្នកប្រើប្រាស់",
+                backup: "បម្រុងទុក",
+                store_name: "ឈ្មោះហាង",
+                store_logo: "ឡូហ្គោហាង",
+                language: "ភាសា",
+                english: "អង់គ្លេស",
+                khmer: "ខ្មែរ",
+                chinese: "ចិន",
+                tax_rate: "អត្រាពន្ធ",
+                save: "រក្សាទុក",
+                add_user: "បន្ថែមអ្នកប្រើប្រាស់",
+                name: "ឈ្មោះ",
+                enter_name: "បញ្ចូលឈ្មោះ",
+                role: "តួនាទី",
+                admin: "អ្នកគ្រប់គ្រង",
+                manager: "អ្នកគ្រប់គ្រង",
+                staff: "បុគ្គលិក",
+                save_user: "រក្សាទុកអ្នកប្រើប្រាស់",
+                delete_user: "លុបអ្នកប្រើប្រាស់",
+                enter_username: "បញ្ចូលឈ្មោះអ្នកប្រើប្រាស់",
+                enter_password: "បញ្ចូលពាក្យសម្ងាត់",
+                data_backup: "បម្រុងទុកទិន្នន័យ",
+                backup_description: "នាំចេញ ឬនាំចូលទិន្នន័យ POS របស់អ្នកសម្រាប់គោលបំណងបម្រុងទុក។",
+                export_backup: "នាំចេញបម្រុងទុក",
+                import_backup: "នាំចូលបម្រុងទុក",
+                danger_zone: "តំបន់គ្រោះថ្នាក់",
+                reset_warning: "ការព្រមាន៖ នេះនឹងលុបទិន្នន័យទាំងអស់ ហើយមិនអាចត្រឡប់មកវិញបានទេ។",
+                reset_data: "កំណត់ទិន្នន័យឡើងវិញទាំងអស់",
+                all_categories: "ប្រភេទទាំងអស់",
+                item_added: "មុខម្ហូបត្រូវបានបន្ថែមទៅការកម្មង់",
+                item_unavailable: "មុខម្ហូបនេះបច្ចុប្បន្នមិនអាចរកបានទេ",
+                select_table_first: "សូមជ្រើសរើសតុសម្រាប់ការកម្មង់នេះ",
+                add_items_first: "សូមបន្ថែមមុខម្ហូបទៅការកម្មង់មុនពេលបន្តទៅការទូទាត់",
+                enter_valid_discount: "សូមបញ្ចូលតម្លៃបញ្ចុះតម្លៃត្រឹមត្រូវ",
+                percentage_range: "ការបញ្ចុះតម្លៃជាភាគរយត្រូវតែមានចន្លោះពី 0 ដល់ 100",
+                enter_amount_paid: "សូមបញ្ចូលចំនួនទឹកប្រាក់ដែលបានបង់",
+                enter_card_amount: "សូមបញ្ចូលចំនួនទឹកប្រាក់ផ្ទេរតាមធនាគារ",
+                both_amounts: "សូមបញ្ចូលចំនួនទឹកប្រាក់សម្រាប់វិធីសាបព្រោះទាំងពីរ",
+                amount_less: "ចំនួនទឹកប្រាក់ដែលបានបង់តិចជាងចំនួនសរុបដែលត្រូវបង់",
+                confirm_delete: "តើអ្នកប្រាកដថាចង់លុបមុខម្ហូបនេះមែនទេ?",
+                fill_required: "សូមបំពេញគ្រប់ផ្នែកដែលត្រូវការ",
+                clear: "ជម្រះ",
+                enter: "បញ្ចូល",
+                enter_amount: "បញ្ចូលចំនួនទឹកប្រាក់",
+                thank_you: "សូមអរគុណសម្រាប់ការមករកយើងខ្ញុំ!",
+                paid: "បានបង់"
+            },
+            zh: {
+                login_title: "餐厅POS系统登录",
+                username: "用户名",
+                password: "密码",
+                login: "登录",
+                logout: "退出",
+                restaurant_pos: "餐厅POS系统",
+                new_order: "新订单",
+                manage_items: "管理菜品",
+                sales_reports: "销售报告",
+                settings: "设置",
+                welcome: "欢迎,",
+                welcome_message: "欢迎使用POS系统",
+                search_items: "搜索菜品...",
+                all_items: "所有菜品",
+                all: "全部",
+                food: "食物",
+                drinks: "饮料",
+                desserts: "甜点",
+                order: "订单 #",
+                edit: "编辑",
+                customer_info: "顾客信息",
+                select_customer: "选择顾客",
+                walk_in: "散客",
+                select_table: "选择桌子",
+                table: "桌子",
+                dine_in: "堂食",
+                takeaway: "外卖",
+                add_discount: "添加折扣",
+                amount: "金额 ($)",
+                percentage: "百分比 (%)",
+                discount_value: "折扣值",
+                apply: "应用",
+                note: "备注",
+                subtotal: "小计",
+                discount: "折扣",
+                tax: "税",
+                total: "总计",
+                continue_to_payment: "继续付款",
+                payment_method: "付款方式",
+                cash: "现金",
+                bank_transfer: "银行转账",
+                mixed_payment: "混合支付",
+                amount_paid: "已付金额",
+                enter_amount: "输入金额",
+                bank_transfer_amount: "银行转账金额",
+                change: "找零",
+                confirm_payment: "确认付款",
+                cancel: "取消",
+                print_receipt: "打印收据",
+                close: "关闭",
+                add_new_item: "添加新菜品",
+                item_name: "菜品名称",
+                enter_item_name: "输入菜品名称",
+                category: "类别",
+                price: "价格",
+                enter_price: "输入价格",
+                description: "描述",
+                enter_description: "输入描述",
+                upload_image: "上传图片",
+                availability: "可用性",
+                available: "可用",
+                not_available: "不可用",
+                save_item: "保存菜品",
+                delete_item: "删除菜品",
+                total_sales: "总销售额",
+                total_orders: "总订单数",
+                average_order: "平均订单",
+                to: "至",
+                generate: "生成",
+                export_csv: "导出CSV",
+                date: "日期",
+                customer: "顾客",
+                items: "项目",
+                print_report: "打印报告",
+                general: "常规",
+                users: "用户",
+                backup: "备份",
+                store_name: "店铺名称",
+                store_logo: "店铺标志",
+                language: "语言",
+                english: "英语",
+                khmer: "高棉语",
+                chinese: "中文",
+                tax_rate: "税率",
+                save: "保存",
+                add_user: "添加用户",
+                name: "姓名",
+                enter_name: "输入姓名",
+                role: "角色",
+                admin: "管理员",
+                manager: "经理",
+                staff: "员工",
+                save_user: "保存用户",
+                delete_user: "删除用户",
+                enter_username: "输入用户名",
+                enter_password: "输入密码",
+                data_backup: "数据备份",
+                backup_description: "导出或导入您的POS数据以进行备份。",
+                export_backup: "导出备份",
+                import_backup: "导入备份",
+                danger_zone: "危险区域",
+                reset_warning: "警告：这将删除所有数据且无法撤消。",
+                reset_data: "重置所有数据",
+                all_categories: "所有类别",
+                item_added: "菜品已添加到订单",
+                item_unavailable: "此菜品目前不可用",
+                select_table_first: "请为此订单选择一张桌子",
+                add_items_first: "请在继续付款前添加菜品到订单",
+                enter_valid_discount: "请输入有效的折扣值",
+                percentage_range: "百分比折扣必须在0到100之间",
+                enter_amount_paid: "请输入已付金额",
+                enter_card_amount: "请输入银行转账金额",
+                both_amounts: "请输入两种付款方式的金额",
+                amount_less: "已付金额少于应付总额",
+                confirm_delete: "您确定要删除此菜品吗？",
+                fill_required: "请填写所有必填字段",
+                clear: "清除",
+                enter: "输入",
+                enter_amount: "输入金额",
+                thank_you: "感谢您的光临！",
+                paid: "已支付"
+            }
+        };
+
+        // Current language
+        let currentLanguage = 'en';
         
-        // Sample sales data with payment methods
-        let salesData = [
-            { orderNumber: 654, date: "2023-01-01", customer: "Walk-in", paymentMethod: "cash", items: ["Pizza Tandoori Paneer", "Chocolate Blueberry"], total: 62.00 },
-            { orderNumber: 653, date: "2022-12-31", customer: "Piseth", paymentMethod: "card", items: ["Burger Creamy Mushroom", "Arnericano"], total: 50.00 },
-            { orderNumber: 652, date: "2022-12-30", customer: "Bor", paymentMethod: "mixed", items: ["Chicken Noodles", "Vanilla Chocolate"], total: 52.00 },
-            { orderNumber: 651, date: "2022-12-29", customer: "Walk-in", paymentMethod: "cash", items: ["Pizza Sweet Corn", "Pure Tango Oil"], total: 270.00 },
-            { orderNumber: 650, date: "2022-12-28", customer: "Piseth", paymentMethod: "card", items: ["Dryer and Vegetarian", "Sweet Granulated Sugar Croissant"], total: 52.00 }
-        ];
+        // Current user
+        let currentUser = null;
+        
+        // Initialize database
+        const db = new Database();
         
         // Current order
         let currentOrder = {
             items: [],
             customer: "",
             table: "",
+            orderType: "dine-in",
             discount: 0,
-            discountType: "amount", // 'amount' or 'percentage'
+            discountType: "amount",
             note: "",
-            date: new Date()
+            date: new Date(),
+            orderNumber: db.generateOrderNumber()
         };
         
         // Current item being edited (for management)
         let currentItem = null;
         
+        // Current user being edited (for management)
+        let currentEditUser = null;
+        
+        // Keypad target input
+        let keypadTarget = null;
+        
         // DOM elements
+        const loginModal = document.getElementById('loginModal');
+        const loginForm = document.getElementById('loginForm');
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+        const navBar = document.getElementById('navBar');
+        const mainContainer = document.getElementById('mainContainer');
+        const userNameElement = document.getElementById('userName');
+        const storeLogo = document.getElementById('storeLogo');
+        const receiptLogo = document.getElementById('receiptLogo');
         const menuItemsContainer = document.getElementById('menuItems');
         const orderItemsContainer = document.getElementById('orderItems');
         const subtotalElement = document.getElementById('subtotal');
@@ -1061,6 +2060,8 @@
         const totalElement = document.getElementById('total');
         const customerSelect = document.getElementById('customerSelect');
         const tableSelect = document.getElementById('tableSelect');
+        const dineInBtn = document.getElementById('dineInBtn');
+        const takeawayBtn = document.getElementById('takeawayBtn');
         const discountValueInput = document.getElementById('discountValue');
         const orderNoteInput = document.getElementById('orderNote');
         const applyDiscountBtn = document.getElementById('applyDiscount');
@@ -1075,13 +2076,17 @@
         const receiptDateElement = document.getElementById('receiptDate');
         const newOrderBtn = document.getElementById('newOrderBtn');
         const editOrderBtn = document.getElementById('editOrderBtn');
-        const manageItemsBtn = document.getElementById('manageItemsBtn');
         const reportsBtn = document.getElementById('reportsBtn');
+        const settingsBtn = document.getElementById('settingsBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
         const reportsModal = document.getElementById('reportsModal');
         const closeReportsBtn = document.getElementById('closeReports');
         const startDateInput = document.getElementById('startDate');
         const endDateInput = document.getElementById('endDate');
+        const reportCategorySelect = document.getElementById('reportCategory');
+        const reportItemSelect = document.getElementById('reportItem');
         const generateReportBtn = document.getElementById('generateReport');
+        const exportReportBtn = document.getElementById('exportReport');
         const salesTableBody = document.getElementById('salesTableBody');
         const totalSalesElement = document.getElementById('totalSales');
         const totalOrdersElement = document.getElementById('totalOrders');
@@ -1097,26 +2102,55 @@
         const changeAmountElement = document.getElementById('changeAmount');
         const confirmPaymentBtn = document.getElementById('confirmPayment');
         const cancelPaymentBtn = document.getElementById('cancelPayment');
-        const itemManagementModal = document.getElementById('itemManagementModal');
-        const itemModalTitle = document.getElementById('itemModalTitle');
-        const itemNameInput = document.getElementById('itemName');
-        const itemCategorySelect = document.getElementById('itemCategory');
-        const itemPriceInput = document.getElementById('itemPrice');
-        const itemDescriptionInput = document.getElementById('itemDescription');
-        const itemAvailabilitySelect = document.getElementById('itemAvailability');
-        const imagePreview = document.getElementById('imagePreview');
-        const itemImageInput = document.getElementById('itemImage');
-        const uploadImageBtn = document.getElementById('uploadImageBtn');
-        const saveItemBtn = document.getElementById('saveItem');
-        const cancelItemBtn = document.getElementById('cancelItem');
-        const deleteItemBtn = document.getElementById('deleteItem');
+        const keypadModal = document.getElementById('keypadModal');
+        const keypadInput = document.getElementById('keypadInput');
+        const keypadClearBtn = document.getElementById('keypadClear');
+        const keypadEnterBtn = document.getElementById('keypadEnter');
+        const openKeypadBtn = document.getElementById('openKeypadBtn');
+        const openKeypadBtn2 = document.getElementById('openKeypadBtn2');
+        const settingsModal = document.getElementById('settingsModal');
+        const closeSettingsBtn = document.getElementById('closeSettings');
+        const settingsTabs = document.querySelectorAll('.settings-tab');
+        const generalSettings = document.getElementById('generalSettings');
+        const userSettings = document.getElementById('userSettings');
+        const backupSettings = document.getElementById('backupSettings');
+        const storeNameInput = document.getElementById('storeName');
+        const languageSelect = document.getElementById('languageSelect');
+        const taxRateInput = document.getElementById('taxRate');
+        const saveSettingsBtn = document.getElementById('saveSettings');
+        const cancelSettingsBtn = document.getElementById('cancelSettings');
+        const addUserBtn = document.getElementById('addUserBtn');
+        const userList = document.getElementById('userList');
+        const exportBackupBtn = document.getElementById('exportBackupBtn');
+        const importBackupBtn = document.getElementById('importBackupBtn');
+        const backupFileInput = document.getElementById('backupFile');
+        const resetDataBtn = document.getElementById('resetDataBtn');
+        const userModal = document.getElementById('userModal');
+        const userModalTitle = document.getElementById('userModalTitle');
+        const userUsernameInput = document.getElementById('userUsername');
+        const userPasswordInput = document.getElementById('userPassword');
+        const userNameInput = document.getElementById('userName');
+        const userRoleSelect = document.getElementById('userRole');
+        const saveUserBtn = document.getElementById('saveUser');
+        const cancelUserBtn = document.getElementById('cancelUser');
+        const deleteUserBtn = document.getElementById('deleteUser');
+        const logoPreview = document.getElementById('logoPreview');
+        const storeLogoInput = document.getElementById('storeLogo');
+        const uploadLogoBtn = document.getElementById('uploadLogoBtn');
         
         // Initialize the app
         function init() {
-            renderMenuItems();
-            updateOrderSummary();
-            setupEventListeners();
-            generateOrderNumber();
+            // Check if user is logged in
+            if (currentUser) {
+                loginModal.style.display = 'none';
+                navBar.style.display = 'flex';
+                mainContainer.style.display = 'grid';
+                loadSettings();
+            } else {
+                loginModal.style.display = 'flex';
+                navBar.style.display = 'none';
+                mainContainer.style.display = 'none';
+            }
             
             // Set default dates for reports
             const today = new Date();
@@ -1126,13 +2160,80 @@
             startDateInput.valueAsDate = oneWeekAgo;
             endDateInput.valueAsDate = today;
             
-            generateSalesReport();
+            // Initialize UI
+            renderMenuItems();
+            updateOrderSummary();
+            setupEventListeners();
+        }
+        
+        // Load settings
+        function loadSettings() {
+            const settings = db.getSettings();
+            
+            // Update store name and logo
+            storeNameInput.value = settings.storeName || '';
+            languageSelect.value = settings.language || 'en';
+            taxRateInput.value = settings.taxRate || 10;
+            
+            if (settings.storeLogo) {
+                storeLogo.src = settings.storeLogo;
+                receiptLogo.src = settings.storeLogo;
+                logoPreview.innerHTML = `<img src="${settings.storeLogo}" alt="Store Logo" style="max-width: 100%; max-height: 100%;">`;
+            }
+            
+            // Update language
+            currentLanguage = settings.language || 'en';
+            updateLanguage();
+        }
+        
+        // Update language for all elements
+        function updateLanguage() {
+            const lang = translations[currentLanguage];
+            
+            // Update elements with data-i18n attribute
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (lang[key]) {
+                    el.textContent = lang[key];
+                }
+            });
+            
+            // Update placeholder texts
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                if (lang[key]) {
+                    el.setAttribute('placeholder', lang[key]);
+                }
+            });
+            
+            // Update select options
+            document.querySelectorAll('option[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (lang[key]) {
+                    el.textContent = lang[key];
+                }
+            });
+            
+            // Update order type buttons
+            if (currentOrder.orderType === 'dine-in') {
+                dineInBtn.classList.add('active');
+                takeawayBtn.classList.remove('active');
+                tableSelect.style.display = 'block';
+            } else {
+                dineInBtn.classList.remove('active');
+                takeawayBtn.classList.add('active');
+                tableSelect.style.display = 'none';
+            }
+            
+            // Update report items
+            updateReportItems();
         }
         
         // Render menu items with search and category filtering
         function renderMenuItems(category = 'all', searchQuery = '') {
             menuItemsContainer.innerHTML = '';
             
+            const menuItems = db.getMenuItems();
             const filteredItems = menuItems.filter(item => {
                 const matchesCategory = category === 'all' || item.category === category;
                 const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
@@ -1141,7 +2242,7 @@
             });
             
             if (filteredItems.length === 0) {
-                menuItemsContainer.innerHTML = '<p>No items found matching your search.</p>';
+                menuItemsContainer.innerHTML = `<p>${translations[currentLanguage].no_items_found || 'No items found matching your search.'}</p>`;
                 return;
             }
             
@@ -1155,8 +2256,8 @@
                     <h3>${item.name}</h3>
                     <p>${item.description}</p>
                     <div class="price">$${item.price.toFixed(2)}</div>
-                    <div class="availability">${item.available ? 'Available!' : 'Not Available'}</div>
-                    <button class="add-btn">Add</button>
+                    <div class="availability ${item.available ? '' : 'unavailable'}">${item.available ? translations[currentLanguage].available || 'Available' : translations[currentLanguage].not_available || 'Not Available'}</div>
+                    <button class="add-btn" ${item.available ? '' : 'disabled'}>${translations[currentLanguage].add || 'Add'}</button>
                 `;
                 
                 menuItemsContainer.appendChild(menuItemElement);
@@ -1170,7 +2271,7 @@
         // Add item to order
         function addToOrder(item) {
             if (!item.available) {
-                alert('This item is currently not available.');
+                alert(translations[currentLanguage].item_unavailable);
                 return;
             }
             
@@ -1189,6 +2290,21 @@
             
             renderOrderItems();
             updateOrderSummary();
+            
+            // Show notification
+            showNotification(`${item.name} ${translations[currentLanguage].item_added}`);
+        }
+        
+        // Show notification
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 2000);
         }
         
         // Render order items
@@ -1196,7 +2312,7 @@
             orderItemsContainer.innerHTML = '';
             
             if (currentOrder.items.length === 0) {
-                orderItemsContainer.innerHTML = '<p>No items added to order yet.</p>';
+                orderItemsContainer.innerHTML = `<p>${translations[currentLanguage].no_items_in_order || 'No items added to order yet.'}</p>`;
                 return;
             }
             
@@ -1260,7 +2376,8 @@
                 discountAmount = subtotal * (currentOrder.discount / 100);
             }
             
-            const tax = (subtotal - discountAmount) * 0.1; // 10% tax
+            const taxRate = db.getSettings().taxRate || 10;
+            const tax = (subtotal - discountAmount) * (taxRate / 100);
             const total = subtotal - discountAmount + tax;
             
             subtotalElement.textContent = `$${subtotal.toFixed(2)}`;
@@ -1274,12 +2391,12 @@
             const discountValue = parseFloat(discountValueInput.value);
             
             if (isNaN(discountValue)) {
-                alert('Please enter a valid discount value');
+                alert(translations[currentLanguage].enter_valid_discount);
                 return;
             }
             
             if (currentOrder.discountType === 'percentage' && (discountValue < 0 || discountValue > 100)) {
-                alert('Percentage discount must be between 0 and 100');
+                alert(translations[currentLanguage].percentage_range);
                 return;
             }
             
@@ -1288,28 +2405,20 @@
             discountValueInput.value = '';
         }
         
-        // Generate order number
-        function generateOrderNumber() {
-            // In a real app, this would come from your backend/database
-            const orderNumber = Math.floor(Math.random() * 900) + 100;
-            orderNumberElement.textContent = orderNumber;
-            return orderNumber;
-        }
-        
         // Process payment
         function processPayment() {
             if (currentOrder.items.length === 0) {
-                alert('Please add items to the order before proceeding to payment.');
+                alert(translations[currentLanguage].add_items_first);
                 return;
             }
             
-            if (!tableSelect.value) {
-                alert('Please select a table for this order.');
+            if (currentOrder.orderType === 'dine-in' && !tableSelect.value) {
+                alert(translations[currentLanguage].select_table_first);
                 return;
             }
             
             // Set order details
-            currentOrder.customer = customerSelect.value || 'Walk-in';
+            currentOrder.customer = customerSelect.value || translations[currentLanguage].walk_in || 'Walk-in';
             currentOrder.table = tableSelect.value;
             currentOrder.note = orderNoteInput.value;
             currentOrder.date = new Date();
@@ -1342,7 +2451,7 @@
             
             if (totalPaid >= total) {
                 const change = totalPaid - total;
-                changeAmountElement.textContent = `Change: $${change.toFixed(2)}`;
+                changeAmountElement.innerHTML = `<span data-i18n="change">${translations[currentLanguage].change}</span>: $${change.toFixed(2)}`;
                 changeAmountElement.style.display = 'block';
             } else {
                 changeAmountElement.style.display = 'none';
@@ -1361,7 +2470,7 @@
             
             if (paymentMethod === 'mixed') {
                 if (amountPaid <= 0 || cardAmount <= 0) {
-                    alert('Please enter amounts for both payment methods');
+                    alert(translations[currentLanguage].both_amounts);
                     return;
                 }
                 
@@ -1373,7 +2482,7 @@
                 };
             } else if (paymentMethod === 'card') {
                 if (cardAmount <= 0) {
-                    alert('Please enter bank transfer amount');
+                    alert(translations[currentLanguage].enter_card_amount);
                     return;
                 }
                 
@@ -1384,7 +2493,7 @@
                 };
             } else {
                 if (amountPaid <= 0) {
-                    alert('Please enter amount paid');
+                    alert(translations[currentLanguage].enter_amount_paid);
                     return;
                 }
                 
@@ -1395,12 +2504,26 @@
             }
             
             if (totalPaid < total) {
-                alert('Amount paid is less than the total amount due');
+                alert(translations[currentLanguage].amount_less);
                 return;
             }
             
             // Set payment details
             currentOrder.payment = paymentDetails;
+            
+            // Save the order to database
+            const sale = {
+                date: currentOrder.date.toISOString(),
+                customer: currentOrder.customer,
+                paymentMethod: paymentDetails.method,
+                items: currentOrder.items.map(item => item.name),
+                itemsData: currentOrder.items.map(item => ({ id: item.id, quantity: item.quantity })),
+                total: total,
+                orderType: currentOrder.orderType,
+                table: currentOrder.table
+            };
+            
+            db.saveSale(sale);
             
             // Generate receipt
             generateReceipt();
@@ -1412,11 +2535,11 @@
         
         // Generate receipt
         function generateReceipt() {
-            receiptOrderNumberElement.textContent = orderNumberElement.textContent;
+            receiptOrderNumberElement.textContent = currentOrder.orderNumber || orderNumberElement.textContent;
             
             // Format date
             const options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
-            receiptDateElement.textContent = currentOrder.date.toLocaleDateString('en-US', options);
+            receiptDateElement.textContent = currentOrder.date.toLocaleDateString(currentLanguage === 'zh' ? 'zh-CN' : currentLanguage, options);
             
             // Add items to receipt
             receiptBody.innerHTML = '';
@@ -1439,13 +2562,14 @@
                 discountAmount = subtotal * (currentOrder.discount / 100);
             }
             
-            const tax = (subtotal - discountAmount) * 0.1;
+            const taxRate = db.getSettings().taxRate || 10;
+            const tax = (subtotal - discountAmount) * (taxRate / 100);
             const total = subtotal - discountAmount + tax;
             
             const subtotalElement = document.createElement('div');
             subtotalElement.className = 'receipt-item';
             subtotalElement.innerHTML = `
-                <span>Subtotal</span>
+                <span>${translations[currentLanguage].subtotal}</span>
                 <span>$${subtotal.toFixed(2)}</span>
             `;
             receiptBody.appendChild(subtotalElement);
@@ -1454,7 +2578,7 @@
                 const discountElement = document.createElement('div');
                 discountElement.className = 'receipt-item';
                 discountElement.innerHTML = `
-                    <span>Discount ${currentOrder.discountType === 'percentage' ? `(${currentOrder.discount}%)` : ''}</span>
+                    <span>${translations[currentLanguage].discount} ${currentOrder.discountType === 'percentage' ? `(${currentOrder.discount}%)` : ''}</span>
                     <span>-$${discountAmount.toFixed(2)}</span>
                 `;
                 receiptBody.appendChild(discountElement);
@@ -1463,7 +2587,7 @@
             const taxElement = document.createElement('div');
             taxElement.className = 'receipt-item';
             taxElement.innerHTML = `
-                <span>Tax (10%)</span>
+                <span>${translations[currentLanguage].tax} (${taxRate}%)</span>
                 <span>$${tax.toFixed(2)}</span>
             `;
             receiptBody.appendChild(taxElement);
@@ -1471,7 +2595,7 @@
             const totalElement = document.createElement('div');
             totalElement.className = 'receipt-item receipt-total';
             totalElement.innerHTML = `
-                <span>Total</span>
+                <span>${translations[currentLanguage].total}</span>
                 <span>$${total.toFixed(2)}</span>
             `;
             receiptBody.appendChild(totalElement);
@@ -1482,14 +2606,14 @@
             
             let paymentText = '';
             if (currentOrder.payment.method === 'cash') {
-                paymentText = `Paid: $${currentOrder.payment.cashAmount.toFixed(2)} (Cash)`;
+                paymentText = `${translations[currentLanguage].paid}: $${currentOrder.payment.cashAmount.toFixed(2)} (${translations[currentLanguage].cash})`;
                 if (currentOrder.payment.cashAmount > total) {
-                    paymentText += `<br>Change: $${(currentOrder.payment.cashAmount - total).toFixed(2)}`;
+                    paymentText += `<br>${translations[currentLanguage].change}: $${(currentOrder.payment.cashAmount - total).toFixed(2)}`;
                 }
             } else if (currentOrder.payment.method === 'card') {
-                paymentText = `Paid: $${currentOrder.payment.cardAmount.toFixed(2)} (Bank Transfer)`;
+                paymentText = `${translations[currentLanguage].paid}: $${currentOrder.payment.cardAmount.toFixed(2)} (${translations[currentLanguage].bank_transfer})`;
             } else {
-                paymentText = `Paid: $${(currentOrder.payment.cashAmount + currentOrder.payment.cardAmount).toFixed(2)} (Mixed: Cash $${currentOrder.payment.cashAmount.toFixed(2)} + Bank Transfer $${currentOrder.payment.cardAmount.toFixed(2)})`;
+                paymentText = `${translations[currentLanguage].paid}: $${(currentOrder.payment.cashAmount + currentOrder.payment.cardAmount).toFixed(2)} (${translations[currentLanguage].mixed_payment}: ${translations[currentLanguage].cash} $${currentOrder.payment.cashAmount.toFixed(2)} + ${translations[currentLanguage].bank_transfer} $${currentOrder.payment.cardAmount.toFixed(2)})`;
             }
             
             paymentElement.innerHTML = paymentText;
@@ -1501,31 +2625,49 @@
                 noteElement.className = 'receipt-item';
                 noteElement.style.marginTop = '10px';
                 noteElement.innerHTML = `
-                    <span><strong>Note:</strong> ${currentOrder.note}</span>
+                    <span><strong>${translations[currentLanguage].note}:</strong> ${currentOrder.note}</span>
                 `;
                 receiptBody.appendChild(noteElement);
             }
             
-            // Add table information
-            const tableElement = document.createElement('div');
-            tableElement.className = 'receipt-item';
-            tableElement.innerHTML = `
-                <span><strong>Table:</strong> ${currentOrder.table}</span>
+            // Add order type and table information
+            const typeElement = document.createElement('div');
+            typeElement.className = 'receipt-item';
+            typeElement.innerHTML = `
+                <span><strong>${translations[currentLanguage].orderType || 'Order Type'}:</strong> ${currentOrder.orderType === 'dine-in' ? translations[currentLanguage].dine_in : translations[currentLanguage].takeaway}</span>
             `;
-            receiptBody.appendChild(tableElement);
+            receiptBody.appendChild(typeElement);
+            
+            if (currentOrder.orderType === 'dine-in' && currentOrder.table) {
+                const tableElement = document.createElement('div');
+                tableElement.className = 'receipt-item';
+                tableElement.innerHTML = `
+                    <span><strong>${translations[currentLanguage].table}:</strong> ${currentOrder.table}</span>
+                `;
+                receiptBody.appendChild(tableElement);
+            }
+            
+            // Add thank you message
+            const thankYouElement = document.createElement('div');
+            thankYouElement.className = 'receipt-item';
+            thankYouElement.style.textAlign = 'center';
+            thankYouElement.style.marginTop = '15px';
+            thankYouElement.innerHTML = `
+                <span>${translations[currentLanguage].thank_you || 'Thank you for your visit!'}</span>
+            `;
+            receiptBody.appendChild(thankYouElement);
         }
         
         // Print receipt
         function printReceipt() {
             const printContent = `
                 <div style="text-align: center; font-family: Arial, sans-serif; max-width: 300px; margin: 0 auto;">
-                    <h2 style="color: #4a6bff;">Restaurant POS</h2>
-                    <p>Order #${receiptOrderNumberElement.textContent}</p>
+                    ${storeLogo.src ? `<img src="${storeLogo.src}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 50%; margin-bottom: 10px; border: 2px solid #4a6bff;">` : ''}
+                    <h2 style="color: #4a6bff;">${db.getSettings().storeName || translations[currentLanguage].restaurant_pos}</h2>
+                    <p>${translations[currentLanguage].order} ${receiptOrderNumberElement.textContent}</p>
                     <p>${receiptDateElement.textContent}</p>
                     <hr style="border-top: 1px dashed #333; margin: 10px 0;">
                     ${Array.from(receiptBody.children).map(child => child.outerHTML).join('')}
-                    <hr style="border-top: 1px dashed #333; margin: 10px 0;">
-                    <p style="font-size: 12px;">Thank you for your visit!</p>
                 </div>
             `;
             
@@ -1537,15 +2679,56 @@
             printWindow.close();
         }
         
+        // Update report items dropdown based on category
+        function updateReportItems() {
+            const category = reportCategorySelect.value;
+            const menuItems = db.getMenuItems();
+            const filteredItems = category === 'all' ? menuItems : menuItems.filter(item => item.category === category);
+            
+            reportItemSelect.innerHTML = '<option value="all" data-i18n="all_items">All Items</option>';
+            
+            filteredItems.forEach(item => {
+                const option = document.createElement('option');
+                option.value = item.id;
+                option.textContent = item.name;
+                reportItemSelect.appendChild(option);
+            });
+            
+            // Update translations for options
+            document.querySelectorAll('option[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[currentLanguage][key]) {
+                    el.textContent = translations[currentLanguage][key];
+                }
+            });
+        }
+        
         // Generate sales report
         function generateSalesReport() {
             const startDate = new Date(startDateInput.value);
             const endDate = new Date(endDateInput.value);
+            const category = reportCategorySelect.value;
+            const itemId = reportItemSelect.value;
             
-            // Filter sales data by date range
-            const filteredSales = salesData.filter(sale => {
+            // Filter sales data by date range and category/item
+            const filteredSales = db.getSalesData().filter(sale => {
                 const saleDate = new Date(sale.date);
-                return saleDate >= startDate && saleDate <= endDate;
+                const dateInRange = saleDate >= startDate && saleDate <= endDate;
+                
+                if (!dateInRange) return false;
+                
+                if (category === 'all' && itemId === 'all') return true;
+                
+                if (itemId !== 'all') {
+                    return sale.itemsData.some(item => item.id.toString() === itemId);
+                } else {
+                    // Filter by category
+                    const menuItems = db.getMenuItems();
+                    return sale.itemsData.some(itemData => {
+                        const item = menuItems.find(mi => mi.id === itemData.id);
+                        return item && item.category === category;
+                    });
+                }
             });
             
             // Update summary cards
@@ -1565,11 +2748,16 @@
                 
                 let paymentMethod = '';
                 if (sale.paymentMethod === 'cash') {
-                    paymentMethod = 'Cash';
+                    paymentMethod = translations[currentLanguage].cash;
                 } else if (sale.paymentMethod === 'card') {
-                    paymentMethod = 'Bank Transfer';
+                    paymentMethod = translations[currentLanguage].bank_transfer;
                 } else {
-                    paymentMethod = 'Mixed';
+                    paymentMethod = translations[currentLanguage].mixed_payment;
+                }
+                
+                let orderType = sale.orderType === 'dine-in' ? translations[currentLanguage].dine_in : translations[currentLanguage].takeaway;
+                if (sale.orderType === 'dine-in' && sale.table) {
+                    orderType += ` (${sale.table})`;
                 }
                 
                 row.innerHTML = `
@@ -1577,33 +2765,93 @@
                     <td>${new Date(sale.date).toLocaleDateString()}</td>
                     <td>${sale.customer}</td>
                     <td>${paymentMethod}</td>
-                    <td>${sale.items.join(', ')}</td>
+                    <td>${sale.items.join(', ')}<br><small>${orderType}</small></td>
                     <td>$${sale.total.toFixed(2)}</td>
                 `;
                 salesTableBody.appendChild(row);
             });
         }
         
+        // Export report to CSV
+        function exportReportToCSV() {
+            const startDate = new Date(startDateInput.value);
+            const endDate = new Date(endDateInput.value);
+            const category = reportCategorySelect.value;
+            const itemId = reportItemSelect.value;
+            
+            // Filter sales data by date range and category/item
+            const filteredSales = db.getSalesData().filter(sale => {
+                const saleDate = new Date(sale.date);
+                const dateInRange = saleDate >= startDate && saleDate <= endDate;
+                
+                if (!dateInRange) return false;
+                
+                if (category === 'all' && itemId === 'all') return true;
+                
+                if (itemId !== 'all') {
+                    return sale.itemsData.some(item => item.id.toString() === itemId);
+                } else {
+                    // Filter by category
+                    const menuItems = db.getMenuItems();
+                    return sale.itemsData.some(itemData => {
+                        const item = menuItems.find(mi => mi.id === itemData.id);
+                        return item && item.category === category;
+                    });
+                }
+            });
+            
+            // Create CSV content
+            let csvContent = "Order Number,Date,Customer,Payment Method,Items,Order Type,Table,Total\n";
+            
+            filteredSales.forEach(sale => {
+                let paymentMethod = '';
+                if (sale.paymentMethod === 'cash') {
+                    paymentMethod = translations[currentLanguage].cash;
+                } else if (sale.paymentMethod === 'card') {
+                    paymentMethod = translations[currentLanguage].bank_transfer;
+                } else {
+                    paymentMethod = translations[currentLanguage].mixed_payment;
+                }
+                
+                let orderType = sale.orderType === 'dine-in' ? translations[currentLanguage].dine_in : translations[currentLanguage].takeaway;
+                let table = sale.orderType === 'dine-in' && sale.table ? sale.table : '';
+                
+                csvContent += `"${sale.orderNumber}","${new Date(sale.date).toLocaleDateString()}","${sale.customer}","${paymentMethod}","${sale.items.join(', ')}","${orderType}","${table}","${sale.total.toFixed(2)}"\n`;
+            });
+            
+            // Create download link
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.setAttribute('href', url);
+            link.setAttribute('download', `sales_report_${new Date().toISOString().slice(0, 10)}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+        
         // Print report
         function printReport() {
             const printContent = `
                 <div style="font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto;">
-                    <h1 style="color: #4a6bff; text-align: center;">Sales Report</h1>
+                    <h1 style="color: #4a6bff; text-align: center;">${db.getSettings().storeName || translations[currentLanguage].sales_reports}</h1>
+                    <h2 style="text-align: center;">${translations[currentLanguage].sales_reports}</h2>
                     <p style="text-align: center;">
-                        ${new Date(startDateInput.value).toLocaleDateString()} to ${new Date(endDateInput.value).toLocaleDateString()}
+                        ${new Date(startDateInput.value).toLocaleDateString()} ${translations[currentLanguage].to} ${new Date(endDateInput.value).toLocaleDateString()}
                     </p>
                     
                     <div style="display: flex; justify-content: space-between; margin: 20px 0;">
                         <div style="text-align: center; background-color: #f8f9fa; padding: 15px; border-radius: 5px; flex: 1; margin: 0 5px;">
-                            <h3 style="font-size: 14px; color: #495057; margin-bottom: 5px;">Total Sales</h3>
+                            <h3 style="font-size: 14px; color: #495057; margin-bottom: 5px;">${translations[currentLanguage].total_sales}</h3>
                             <p style="font-size: 20px; font-weight: bold; color: #4a6bff;">${totalSalesElement.textContent}</p>
                         </div>
                         <div style="text-align: center; background-color: #f8f9fa; padding: 15px; border-radius: 5px; flex: 1; margin: 0 5px;">
-                            <h3 style="font-size: 14px; color: #495057; margin-bottom: 5px;">Total Orders</h3>
+                            <h3 style="font-size: 14px; color: #495057; margin-bottom: 5px;">${translations[currentLanguage].total_orders}</h3>
                             <p style="font-size: 20px; font-weight: bold; color: #4a6bff;">${totalOrdersElement.textContent}</p>
                         </div>
                         <div style="text-align: center; background-color: #f8f9fa; padding: 15px; border-radius: 5px; flex: 1; margin: 0 5px;">
-                            <h3 style="font-size: 14px; color: #495057; margin-bottom: 5px;">Average Order</h3>
+                            <h3 style="font-size: 14px; color: #495057; margin-bottom: 5px;">${translations[currentLanguage].average_order}</h3>
                             <p style="font-size: 20px; font-weight: bold; color: #4a6bff;">${averageOrderElement.textContent}</p>
                         </div>
                     </div>
@@ -1611,12 +2859,12 @@
                     <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
                         <thead>
                             <tr style="background-color: #f8f9fa;">
-                                <th style="border: 1px solid #e9ecef; padding: 8px; text-align: left;">Order #</th>
-                                <th style="border: 1px solid #e9ecef; padding: 8px; text-align: left;">Date</th>
-                                <th style="border: 1px solid #e9ecef; padding: 8px; text-align: left;">Customer</th>
-                                <th style="border: 1px solid #e9ecef; padding: 8px; text-align: left;">Payment Method</th>
-                                <th style="border: 1px solid #e9ecef; padding: 8px; text-align: left;">Items</th>
-                                <th style="border: 1px solid #e9ecef; padding: 8px; text-align: left;">Total</th>
+                                <th style="border: 1px solid #e9ecef; padding: 8px; text-align: left;">${translations[currentLanguage].order}</th>
+                                <th style="border: 1px solid #e9ecef; padding: 8px; text-align: left;">${translations[currentLanguage].date}</th>
+                                <th style="border: 1px solid #e9ecef; padding: 8px; text-align: left;">${translations[currentLanguage].customer}</th>
+                                <th style="border: 1px solid #e9ecef; padding: 8px; text-align: left;">${translations[currentLanguage].payment_method}</th>
+                                <th style="border: 1px solid #e9ecef; padding: 8px; text-align: left;">${translations[currentLanguage].items}</th>
+                                <th style="border: 1px solid #e9ecef; padding: 8px; text-align: left;">${translations[currentLanguage].total}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -1636,159 +2884,266 @@
         
         // Create new order
         function createNewOrder() {
-            // Save current order to sales data if it has items
-            if (currentOrder.items.length > 0) {
-                const subtotal = currentOrder.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-                let discountAmount = currentOrder.discount;
-                
-                if (currentOrder.discountType === 'percentage') {
-                    discountAmount = subtotal * (currentOrder.discount / 100);
-                }
-                
-                const tax = (subtotal - discountAmount) * 0.1;
-                const total = subtotal - discountAmount + tax;
-                
-                salesData.unshift({
-                    orderNumber: parseInt(orderNumberElement.textContent),
-                    date: currentOrder.date.toISOString().split('T')[0],
-                    customer: currentOrder.customer,
-                    paymentMethod: currentOrder.payment?.method || 'cash',
-                    items: currentOrder.items.map(item => item.name),
-                    total: total
-                });
-            }
-            
             // Reset current order
             currentOrder = {
                 items: [],
                 customer: "",
                 table: "",
+                orderType: "dine-in",
                 discount: 0,
                 discountType: "amount",
                 note: "",
-                date: new Date()
+                date: new Date(),
+                orderNumber: db.generateOrderNumber()
             };
             
             // Reset UI
-            orderItemsContainer.innerHTML = '<p>No items added to order yet.</p>';
+            orderItemsContainer.innerHTML = `<p>${translations[currentLanguage].no_items_in_order || 'No items added to order yet.'}</p>`;
             customerSelect.value = '';
             tableSelect.value = '';
+            dineInBtn.classList.add('active');
+            takeawayBtn.classList.remove('active');
+            tableSelect.style.display = 'block';
             discountValueInput.value = '';
             orderNoteInput.value = '';
             document.querySelector('.discount-type-btn.active').classList.remove('active');
             document.querySelector('.discount-type-btn[data-type="amount"]').classList.add('active');
             updateOrderSummary();
-            generateOrderNumber();
+            orderNumberElement.textContent = currentOrder.orderNumber;
         }
         
-        // Open item management modal for adding new item
-        function openAddItemModal() {
-            currentItem = null;
-            itemModalTitle.textContent = 'Add New Item';
-            itemNameInput.value = '';
-            itemCategorySelect.value = 'food';
-            itemPriceInput.value = '';
-            itemDescriptionInput.value = '';
-            itemAvailabilitySelect.value = 'true';
-            imagePreview.innerHTML = '<i class="fas fa-image" style="font-size: 40px; color: #ccc;"></i>';
-            deleteItemBtn.style.display = 'none';
-            itemManagementModal.style.display = 'flex';
-        }
-        
-        // Open item management modal for editing existing item
-        function openEditItemModal(itemId) {
-            const item = menuItems.find(item => item.id === itemId);
-            if (!item) return;
+        // Render users list
+        function renderUsersList() {
+            const users = db.getUsers();
+            userList.innerHTML = '';
             
-            currentItem = item;
-            itemModalTitle.textContent = 'Edit Item';
-            itemNameInput.value = item.name;
-            itemCategorySelect.value = item.category;
-            itemPriceInput.value = item.price;
-            itemDescriptionInput.value = item.description;
-            itemAvailabilitySelect.value = item.available.toString();
-            
-            if (item.image) {
-                imagePreview.innerHTML = `<img src="${item.image}" alt="${item.name}" style="max-width: 100%; max-height: 100%;">`;
-            } else {
-                imagePreview.innerHTML = '<i class="fas fa-image" style="font-size: 40px; color: #ccc;"></i>';
-            }
-            
-            deleteItemBtn.style.display = 'block';
-            itemManagementModal.style.display = 'flex';
-        }
-        
-        // Save item (add new or update existing)
-        function saveItem() {
-            const name = itemNameInput.value.trim();
-            const category = itemCategorySelect.value;
-            const price = parseFloat(itemPriceInput.value);
-            const description = itemDescriptionInput.value.trim();
-            const available = itemAvailabilitySelect.value === 'true';
-            
-            if (!name || isNaN(price)) {
-                alert('Please fill in all required fields');
+            if (users.length === 0) {
+                userList.innerHTML = `<p>${translations[currentLanguage].no_users_found || 'No users found.'}</p>`;
                 return;
             }
             
-            // Get image (in a real app, you would upload this to a server)
-            const image = currentItem?.image || '';
-            
-            if (currentItem) {
-                // Update existing item
-                currentItem.name = name;
-                currentItem.category = category;
-                currentItem.price = price;
-                currentItem.description = description;
-                currentItem.available = available;
-                currentItem.image = image;
-            } else {
-                // Add new item
-                const newId = menuItems.length > 0 ? Math.max(...menuItems.map(item => item.id)) + 1 : 1;
-                menuItems.push({
-                    id: newId,
-                    name,
-                    category,
-                    price,
-                    description,
-                    available,
-                    image
-                });
-            }
-            
-            // Refresh menu display
-            const activeCategory = document.querySelector('.category-tab.active').dataset.category;
-            const searchQuery = searchInput.value;
-            renderMenuItems(activeCategory, searchQuery);
-            
-            // Close modal
-            itemManagementModal.style.display = 'none';
+            users.forEach(user => {
+                const userElement = document.createElement('div');
+                userElement.className = 'user-item';
+                
+                userElement.innerHTML = `
+                    <div>
+                        <strong>${user.name}</strong><br>
+                        <small>${user.username} (${translations[currentLanguage][user.role] || user.role})</small>
+                    </div>
+                    <div class="user-actions">
+                        <button class="user-action-btn edit-user-btn" data-id="${user.id}"><i class="fas fa-edit"></i></button>
+                        ${user.role !== 'admin' ? `<button class="user-action-btn delete-user-btn" data-id="${user.id}"><i class="fas fa-trash"></i></button>` : ''}
+                    </div>
+                `;
+                
+                userList.appendChild(userElement);
+                
+                // Add event listeners to buttons
+                const editBtn = userElement.querySelector('.edit-user-btn');
+                const deleteBtn = userElement.querySelector('.delete-user-btn');
+                
+                editBtn.addEventListener('click', () => openEditUserModal(user.id));
+                if (deleteBtn) {
+                    deleteBtn.addEventListener('click', () => deleteUser(user.id));
+                }
+            });
         }
         
-        // Delete item
-        function deleteItem() {
-            if (!currentItem) return;
+        // Open add user modal
+        function openAddUserModal() {
+            currentEditUser = null;
+            userModalTitle.textContent = translations[currentLanguage].add_user;
+            userUsernameInput.value = '';
+            userPasswordInput.value = '';
+            userNameInput.value = '';
+            userRoleSelect.value = 'staff';
+            deleteUserBtn.style.display = 'none';
+            userModal.style.display = 'flex';
+        }
+        
+        // Open edit user modal
+        function openEditUserModal(userId) {
+            const user = db.getUsers().find(u => u.id === userId);
+            if (!user) return;
             
-            if (confirm(`Are you sure you want to delete "${currentItem.name}"?`)) {
-                menuItems = menuItems.filter(item => item.id !== currentItem.id);
-                
-                // Refresh menu display
-                const activeCategory = document.querySelector('.category-tab.active').dataset.category;
-                const searchQuery = searchInput.value;
-                renderMenuItems(activeCategory, searchQuery);
-                
-                // Close modal
-                itemManagementModal.style.display = 'none';
+            currentEditUser = user;
+            userModalTitle.textContent = translations[currentLanguage].edit_user || 'Edit User';
+            userUsernameInput.value = user.username;
+            userPasswordInput.value = '';
+            userNameInput.value = user.name;
+            userRoleSelect.value = user.role;
+            deleteUserBtn.style.display = user.role !== 'admin' ? 'block' : 'none';
+            userModal.style.display = 'flex';
+        }
+        
+        // Save user (add new or update existing)
+        function saveUser() {
+            const username = userUsernameInput.value.trim();
+            const password = userPasswordInput.value.trim();
+            const name = userNameInput.value.trim();
+            const role = userRoleSelect.value;
+            
+            if (!username || !name || (!password && !currentEditUser)) {
+                alert(translations[currentLanguage].fill_required);
+                return;
+            }
+            
+            const user = {
+                username,
+                name,
+                role
+            };
+            
+            if (password) {
+                user.password = password;
+            }
+            
+            if (currentEditUser) {
+                user.id = currentEditUser.id;
+                // Keep existing password if not changed
+                if (!password && currentEditUser.password) {
+                    user.password = currentEditUser.password;
+                }
+            }
+            
+            db.saveUser(user);
+            
+            // Refresh users list
+            renderUsersList();
+            
+            // Close modal
+            userModal.style.display = 'none';
+        }
+        
+        // Delete user
+        function deleteUser(userId) {
+            if (confirm(translations[currentLanguage].confirm_delete.replace('item', 'user'))) {
+                db.deleteUser(userId);
+                renderUsersList();
+            }
+        }
+        
+        // Export backup
+        function exportBackup() {
+            const data = db.exportData();
+            const blob = new Blob([data], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.setAttribute('href', url);
+            link.setAttribute('download', `pos_backup_${new Date().toISOString().slice(0, 10)}.json`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+        
+        // Import backup
+        function importBackup() {
+            backupFileInput.click();
+        }
+        
+        // Handle backup file selection
+        function handleBackupFile(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                if (confirm(translations[currentLanguage].confirm_import || 'Are you sure you want to import this backup? All current data will be replaced.')) {
+                    const success = db.importData(event.target.result);
+                    if (success) {
+                        showNotification(translations[currentLanguage].backup_imported || 'Backup imported successfully');
+                        // Refresh the page to load new data
+                        window.location.reload();
+                    } else {
+                        alert(translations[currentLanguage].import_error || 'Error importing backup');
+                    }
+                }
+            };
+            reader.readAsText(file);
+        }
+        
+        // Reset all data
+        function resetData() {
+            if (confirm(translations[currentLanguage].reset_warning)) {
+                db.resetData();
+                showNotification(translations[currentLanguage].data_reset || 'All data has been reset');
+                // Refresh the page to load initial data
+                window.location.reload();
+            }
+        }
+        
+        // Handle keypad input
+        function handleKeypadInput(value) {
+            if (value === '.') {
+                if (!keypadInput.value.includes('.')) {
+                    keypadInput.value += value;
+                }
+            } else if (value === 'clear') {
+                keypadInput.value = '';
+            } else {
+                keypadInput.value += value;
             }
         }
         
         // Setup event listeners
         function setupEventListeners() {
+            // Login form
+            loginForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const username = usernameInput.value.trim();
+                const password = passwordInput.value.trim();
+                
+                if (!username || !password) {
+                    alert(translations[currentLanguage].fill_required);
+                    return;
+                }
+                
+                const user = db.getUsers().find(u => u.username === username && u.password === password);
+                
+                if (user) {
+                    currentUser = user;
+                    userNameElement.textContent = user.name;
+                    loginModal.style.display = 'none';
+                    navBar.style.display = 'flex';
+                    mainContainer.style.display = 'grid';
+                    loadSettings();
+                } else {
+                    alert(translations[currentLanguage].invalid_credentials || 'Invalid username or password');
+                }
+            });
+            
+            // Logout
+            logoutBtn.addEventListener('click', () => {
+                currentUser = null;
+                loginModal.style.display = 'flex';
+                navBar.style.display = 'none';
+                mainContainer.style.display = 'none';
+                usernameInput.value = '';
+                passwordInput.value = '';
+            });
+            
             // Search functionality
             searchInput.addEventListener('input', () => {
                 const searchQuery = searchInput.value;
                 const activeCategory = document.querySelector('.category-tab.active').dataset.category;
                 renderMenuItems(activeCategory, searchQuery);
+            });
+            
+            // Order type buttons
+            dineInBtn.addEventListener('click', () => {
+                currentOrder.orderType = 'dine-in';
+                dineInBtn.classList.add('active');
+                takeawayBtn.classList.remove('active');
+                tableSelect.style.display = 'block';
+            });
+            
+            takeawayBtn.addEventListener('click', () => {
+                currentOrder.orderType = 'takeaway';
+                dineInBtn.classList.remove('active');
+                takeawayBtn.classList.add('active');
+                tableSelect.style.display = 'none';
             });
             
             // Discount type buttons
@@ -1797,7 +3152,9 @@
                     discountTypeBtns.forEach(b => b.classList.remove('active'));
                     btn.classList.add('active');
                     currentOrder.discountType = btn.dataset.type;
-                    discountValueInput.placeholder = btn.dataset.type === 'percentage' ? 'Discount %' : 'Discount $';
+                    discountValueInput.placeholder = btn.dataset.type === 'percentage' ? 
+                        translations[currentLanguage].discount_value_percentage || 'Discount %' : 
+                        translations[currentLanguage].discount_value || 'Discount $';
                 });
             });
             
@@ -1823,6 +3180,41 @@
                         cardAmountInput.value = '';
                     }
                 });
+            });
+            
+            // Open keypad for amount paid
+            openKeypadBtn.addEventListener('click', () => {
+                keypadTarget = amountPaidInput;
+                keypadInput.value = amountPaidInput.value;
+                keypadModal.style.display = 'flex';
+            });
+            
+            // Open keypad for card amount
+            openKeypadBtn2.addEventListener('click', () => {
+                keypadTarget = cardAmountInput;
+                keypadInput.value = cardAmountInput.value;
+                keypadModal.style.display = 'flex';
+            });
+            
+            // Keypad buttons
+            document.querySelectorAll('.keypad-btn[data-value]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    handleKeypadInput(btn.dataset.value);
+                });
+            });
+            
+            // Keypad clear button
+            keypadClearBtn.addEventListener('click', () => {
+                keypadInput.value = '';
+            });
+            
+            // Keypad enter button
+            keypadEnterBtn.addEventListener('click', () => {
+                if (keypadTarget) {
+                    keypadTarget.value = keypadInput.value;
+                    calculateChange();
+                }
+                keypadModal.style.display = 'none';
             });
             
             // Calculate change when payment amounts change
@@ -1851,11 +3243,8 @@
             
             // Edit order (in this case, just allow editing items)
             editOrderBtn.addEventListener('click', () => {
-                alert('You can now edit the order by adjusting quantities or removing items.');
+                alert(translations[currentLanguage].edit_order_message || 'You can now edit the order by adjusting quantities or removing items.');
             });
-            
-            // Manage items
-            manageItemsBtn.addEventListener('click', openAddItemModal);
             
             // Show reports
             reportsBtn.addEventListener('click', () => {
@@ -1867,8 +3256,14 @@
                 reportsModal.style.display = 'none';
             });
             
+            // Report category change
+            reportCategorySelect.addEventListener('change', updateReportItems);
+            
             // Generate report
             generateReportBtn.addEventListener('click', generateSalesReport);
+            
+            // Export report to CSV
+            exportReportBtn.addEventListener('click', exportReportToCSV);
             
             // Print report
             printReportBtn.addEventListener('click', printReport);
@@ -1883,27 +3278,111 @@
                 });
             });
             
-            // Item management
-            uploadImageBtn.addEventListener('click', () => {
-                itemImageInput.click();
+            // Settings button
+            settingsBtn.addEventListener('click', () => {
+                settingsModal.style.display = 'flex';
+                renderUsersList();
             });
             
-            itemImageInput.addEventListener('change', (e) => {
+            // Close settings modal
+            closeSettingsBtn.addEventListener('click', () => {
+                settingsModal.style.display = 'none';
+            });
+            
+            // Settings tabs
+            settingsTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    settingsTabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    
+                    document.querySelectorAll('.settings-section').forEach(section => {
+                        section.classList.remove('active');
+                    });
+                    
+                    document.getElementById(`${tab.dataset.tab}Settings`).classList.add('active');
+                });
+            });
+            
+            // Save settings
+            saveSettingsBtn.addEventListener('click', () => {
+                const settings = {
+                    storeName: storeNameInput.value,
+                    taxRate: parseFloat(taxRateInput.value) || 10,
+                    language: languageSelect.value
+                };
+                
+                db.updateSettings(settings);
+                
+                // Update UI with new settings
+                currentLanguage = settings.language;
+                updateLanguage();
+                
+                // Show notification
+                showNotification(translations[currentLanguage].settings_saved || 'Settings saved');
+                
+                // Close modal
+                settingsModal.style.display = 'none';
+            });
+            
+            // Cancel settings
+            cancelSettingsBtn.addEventListener('click', () => {
+                settingsModal.style.display = 'none';
+            });
+            
+            // Add user button
+            addUserBtn.addEventListener('click', openAddUserModal);
+            
+            // Save user
+            saveUserBtn.addEventListener('click', saveUser);
+            
+            // Cancel user edit
+            cancelUserBtn.addEventListener('click', () => {
+                userModal.style.display = 'none';
+            });
+            
+            // Delete user
+            deleteUserBtn.addEventListener('click', () => {
+                if (currentEditUser) {
+                    deleteUser(currentEditUser.id);
+                    userModal.style.display = 'none';
+                }
+            });
+            
+            // Export backup
+            exportBackupBtn.addEventListener('click', exportBackup);
+            
+            // Import backup
+            importBackupBtn.addEventListener('click', importBackup);
+            
+            // Backup file input
+            backupFileInput.addEventListener('change', handleBackupFile);
+            
+            // Reset data
+            resetDataBtn.addEventListener('click', resetData);
+            
+            // Upload store logo
+            uploadLogoBtn.addEventListener('click', () => {
+                storeLogoInput.click();
+            });
+            
+            storeLogoInput.addEventListener('change', (e) => {
                 const file = e.target.files[0];
                 if (file) {
                     const reader = new FileReader();
                     reader.onload = (event) => {
-                        imagePreview.innerHTML = `<img src="${event.target.result}" alt="Preview" style="max-width: 100%; max-height: 100%;">`;
+                        const logoUrl = event.target.result;
+                        logoPreview.innerHTML = `<img src="${logoUrl}" alt="Store Logo" style="max-width: 100%; max-height: 100%;">`;
+                        storeLogo.src = logoUrl;
+                        receiptLogo.src = logoUrl;
+                        
+                        // Save logo to settings
+                        const settings = db.getSettings();
+                        settings.storeLogo = logoUrl;
+                        db.updateSettings(settings);
                     };
                     reader.readAsDataURL(file);
                 }
             });
-            
-            saveItemBtn.addEventListener('click', saveItem);
-            cancelItemBtn.addEventListener('click', () => {
-                itemManagementModal.style.display = 'none';
-            });
-            deleteItemBtn.addEventListener('click', deleteItem);
         }
         
         // Initialize the app
