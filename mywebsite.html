@@ -1110,8 +1110,8 @@
         
         <div class="order-section">
             <div class="order-header">
-                <h2 data-i18n="order">Order #<span id="orderNumber">654</span></h2>
-                <button class="edit-btn" id="editOrderBtn"><i class="fas fa-edit"></i> <span data-i18n="edit">Edit</span></button>
+                <h2 data-i18n="order">Order #<span id="orderNumber">1</span></h2>
+                <button class="edit-btn" id="editOrderBtn"><i class="fas fa-edit"></i> <span data-i18n="note">Note</span></button>
             </div>
             
             <div class="order-details">
@@ -1136,6 +1136,7 @@
                         <option value="3" data-i18n="table">Table 3</option>
                         <option value="4" data-i18n="table">Table 4</option>
                         <option value="5" data-i18n="table">Table 5</option>
+                        <option value="5" data-i18n="table">Table 6</option>
                     </select>
                 </div>
                 
@@ -1375,7 +1376,7 @@
                         <div class="image-preview" id="logoPreview">
                             <i class="fas fa-image" style="font-size: 40px; color: #ccc;"></i>
                         </div>
-                        <input type="file" id="storeLogo" accept="image/*" style="display: none;">
+                        <input type="file" id="storeLogo" accept="image/*" style="display: image;">
                         <button class="upload-btn" id="uploadLogoBtn" data-i18n="upload_image">Upload Image</button>
                     </div>
                 </div>
@@ -3387,6 +3388,271 @@
         
         // Initialize the app
         init();
+
+        // Add/Edit/Delete Item with Image
+        function openItemModal(item = null) {
+            currentItem = item;
+            const modalTitle = document.getElementById('itemModalTitle');
+            const itemNameInput = document.getElementById('itemName');
+            const itemPriceInput = document.getElementById('itemPrice');
+            const itemCategorySelect = document.getElementById('itemCategory');
+            const itemDescriptionInput = document.getElementById('itemDescription');
+            const itemImagePreview = document.getElementById('itemImagePreview');
+            const itemImageInput = document.getElementById('itemImageInput');
+            const itemAvailabilityCheckbox = document.getElementById('itemAvailability');
+
+            if (item) {
+                modalTitle.textContent = 'Edit Item';
+                itemNameInput.value = item.name;
+                itemPriceInput.value = item.price;
+                itemCategorySelect.value = item.category;
+                itemDescriptionInput.value = item.description;
+                itemImagePreview.src = item.image || '';
+                itemAvailabilityCheckbox.checked = item.available;
+            } else {
+                modalTitle.textContent = 'Add Item';
+                itemNameInput.value = '';
+                itemPriceInput.value = '';
+                itemCategorySelect.value = 'food';
+                itemDescriptionInput.value = '';
+                itemImagePreview.src = '';
+                itemAvailabilityCheckbox.checked = true;
+            }
+
+            document.getElementById('itemModal').style.display = 'flex';
+        }
+
+        function saveItem() {
+            const itemName = document.getElementById('itemName').value.trim();
+            const itemPrice = parseFloat(document.getElementById('itemPrice').value);
+            const itemCategory = document.getElementById('itemCategory').value;
+            const itemDescription = document.getElementById('itemDescription').value.trim();
+            const itemImage = document.getElementById('itemImagePreview').src;
+            const itemAvailable = document.getElementById('itemAvailability').checked;
+
+            if (!itemName || isNaN(itemPrice)) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+
+            const item = {
+                name: itemName,
+                price: itemPrice,
+                category: itemCategory,
+                description: itemDescription,
+                image: itemImage,
+                available: itemAvailable,
+            };
+
+            if (currentItem) {
+                item.id = currentItem.id;
+            }
+
+            db.saveMenuItem(item);
+            renderMenuItems();
+            document.getElementById('itemModal').style.display = 'none';
+        }
+
+        function deleteItem(itemId) {
+            if (confirm('Are you sure you want to delete this item?')) {
+                db.deleteMenuItem(itemId);
+                renderMenuItems();
+            }
+        }
+
+        // Open Shift with Balance
+        function openShift() {
+            const shiftBalance = parseFloat(prompt('Enter opening balance:'));
+            if (isNaN(shiftBalance) || shiftBalance < 0) {
+                alert('Invalid balance amount.');
+                return;
+            }
+
+            const shiftData = {
+                startTime: new Date().toISOString(),
+                openingBalance: shiftBalance,
+            };
+
+            localStorage.setItem('currentShift', JSON.stringify(shiftData));
+            alert('Shift opened successfully.');
+        }
+
+        function closeShift() {
+            const shiftData = JSON.parse(localStorage.getItem('currentShift'));
+            if (!shiftData) {
+                alert('No active shift to close.');
+                return;
+            }
+
+            const closingBalance = parseFloat(prompt('Enter closing balance:'));
+            if (isNaN(closingBalance) || closingBalance < 0) {
+                alert('Invalid balance amount.');
+                return;
+            }
+
+            shiftData.endTime = new Date().toISOString();
+            shiftData.closingBalance = closingBalance;
+
+            const shifts = JSON.parse(localStorage.getItem('shifts') || '[]');
+            shifts.push(shiftData);
+            localStorage.setItem('shifts', JSON.stringify(shifts));
+            localStorage.removeItem('currentShift');
+            alert('Shift closed successfully.');
+        }
+
+        // Refund Receipt
+        function refundReceipt(orderNumber) {
+            const salesData = db.getSalesData();
+            const sale = salesData.find(s => s.orderNumber === orderNumber);
+
+            if (!sale) {
+                alert('Order not found.');
+                return;
+            }
+
+            if (confirm('Are you sure you want to refund this receipt?')) {
+                sale.refunded = true;
+                db.saveData({ ...db.getData(), salesData });
+                alert('Receipt refunded successfully.');
+            }
+        }
+
+        // Event Listeners for New Features
+        document.getElementById('openShiftBtn').addEventListener('click', openShift);
+        document.getElementById('closeShiftBtn').addEventListener('click', closeShift);
+        document.getElementById('refundReceiptBtn').addEventListener('click', () => {
+            const orderNumber = parseInt(prompt('Enter order number to refund:'));
+            if (!isNaN(orderNumber)) {
+                refundReceipt(orderNumber);
+            }
+        });
     </script>
+    <script>
+document.addEventListener("DOMContentLoaded", function () {
+    const db = new Database();
+
+    // Shift Opening Logic
+    const shiftModal = document.getElementById("shiftModal");
+    const openShiftBtn = document.getElementById("openShiftBtn");
+    const cancelShiftBtn = document.getElementById("cancelShiftBtn");
+    const initialBalanceInput = document.getElementById("initialBalance");
+
+    // Refund Logic
+    const refundModal = document.getElementById("refundModal");
+    const processRefundBtn = document.getElementById("processRefundBtn");
+    const cancelRefundBtn = document.getElementById("cancelRefundBtn");
+    const refundReceiptIdInput = document.getElementById("refundReceiptId");
+    const refundReasonInput = document.getElementById("refundReason");
+
+    if (!db.getData().shifts) {
+        const data = db.getData();
+        data.shifts = [];
+        db.saveData(data);
+    }
+
+    if (!db.getData().refunds) {
+        const data = db.getData();
+        data.refunds = [];
+        db.saveData(data);
+    }
+
+    openShiftBtn.onclick = function () {
+        const balance = parseFloat(initialBalanceInput.value);
+        if (isNaN(balance) || balance < 0) {
+            alert("Please enter a valid initial balance.");
+            return;
+        }
+
+        const currentUser = sessionStorage.getItem("loggedInUser") || "Unknown";
+        const data = db.getData();
+        data.shifts.push({
+            id: data.shifts.length + 1,
+            openedBy: currentUser,
+            openedAt: new Date().toISOString(),
+            initialBalance: balance
+        });
+        db.saveData(data);
+        shiftModal.style.display = "none";
+        alert("Shift opened with balance: $" + balance.toFixed(2));
+    };
+
+    cancelShiftBtn.onclick = () => {
+        shiftModal.style.display = "none";
+    };
+
+    processRefundBtn.onclick = function () {
+        const receiptId = refundReceiptIdInput.value.trim();
+        const reason = refundReasonInput.value.trim();
+
+        if (!receiptId || !reason) {
+            alert("Please enter both receipt ID and refund reason.");
+            return;
+        }
+
+        const data = db.getData();
+        const matchingSale = data.salesData.find(s => s.orderNumber.toString() === receiptId);
+        if (!matchingSale) {
+            alert("Receipt not found.");
+            return;
+        }
+
+        data.refunds.push({
+            id: data.refunds.length + 1,
+            receiptId,
+            reason,
+            refundAmount: matchingSale.total,
+            refundedAt: new Date().toISOString()
+        });
+        db.saveData(data);
+        refundModal.style.display = "none";
+        alert("Refund processed for $" + matchingSale.total.toFixed(2));
+    };
+
+    cancelRefundBtn.onclick = () => {
+        refundModal.style.display = "none";
+    };
+});
+</script>
+
+<!-- Shift Modal -->
+<!-- Shift Modal -->
+<div class="modal" id="shiftModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Open Shift</h2>
+        </div>
+        <div class="form-group">
+            <label for="initialBalance">Initial Balance</label>
+            <input type="number" id="initialBalance" placeholder="Enter initial balance">
+        </div>
+        <div class="modal-buttons">
+            <button class="modal-btn confirm-btn" id="openShiftBtn">Open Shift</button>
+            <button class="modal-btn cancel-btn" id="cancelShiftBtn">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<!-- Refund Modal -->
+<div class="modal" id="refundModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Refund Receipt</h2>
+        </div>
+        <div class="form-group">
+            <label for="refundReceiptId">Receipt ID</label>
+            <input type="text" id="refundReceiptId" placeholder="Enter receipt ID">
+        </div>
+        <div class="form-group">
+            <label for="refundReason">Reason</label>
+            <textarea id="refundReason" placeholder="Enter refund reason"></textarea>
+        </div>
+        <div class="modal-buttons">
+            <button class="modal-btn confirm-btn" id="processRefundBtn">Process Refund</button>
+            <button class="modal-btn cancel-btn" id="cancelRefundBtn">Cancel</button>
+        </div>
+    </div>
+</div>
+
 </body>
+
 </html>
