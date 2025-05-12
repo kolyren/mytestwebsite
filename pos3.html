@@ -1,0 +1,3497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant POS System</title>
+    <style>
+        :root {
+            --primary-color: #4a6bff;
+            --secondary-color: #f8f9fa;
+            --accent-color: #ff6b6b;
+            --text-color: #333;
+            --light-gray: #e9ecef;
+            --dark-gray: #495057;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: var(--text-color);
+        }
+        
+        .container {
+            display: grid;
+            grid-template-columns: 1.8fr 1fr;
+            height: 100vh;
+            gap: 20px;
+            padding: 20px;
+        }
+        
+        /* Menu Section */
+        .menu-section {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        .welcome-header {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .welcome-header h1 {
+            color: var(--primary-color);
+            font-size: 24px;
+        }
+        
+        .welcome-header p {
+            color: var(--dark-gray);
+            font-size: 14px;
+        }
+        
+        .store-logo {
+            max-width: 150px;
+            max-height: 80px;
+            margin-bottom: 10px;
+        }
+        
+        .search-bar {
+            margin-bottom: 15px;
+            position: relative;
+        }
+        
+        .search-bar input {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid var(--light-gray);
+            border-radius: 20px;
+            font-size: 14px;
+        }
+        
+        .search-bar i {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--dark-gray);
+        }
+        
+        .category-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .category-tab {
+            padding: 8px 15px;
+            background-color: var(--light-gray);
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .category-tab.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .menu-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .menu-item {
+            background-color: white;
+            border: 1px solid var(--light-gray);
+            border-radius: 8px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .menu-item:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .menu-item-img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        
+        .menu-item h3 {
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+        
+        .menu-item p {
+            font-size: 12px;
+            color: var(--dark-gray);
+            margin-bottom: 10px;
+            height: 40px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .menu-item .price {
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+        
+        .menu-item .availability {
+            font-size: 12px;
+            color: var(--success-color);
+            font-weight: 500;
+        }
+        
+        .menu-item .availability.unavailable {
+            color: var(--danger-color);
+        }
+        
+        .add-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            transition: all 0.3s;
+        }
+        
+        .add-btn:hover {
+            background-color: #3a5bd9;
+        }
+        
+        .add-btn:disabled {
+            background-color: var(--light-gray);
+            cursor: not-allowed;
+        }
+        
+        /* Order Section */
+        .order-section {
+            display: flex;
+            flex-direction: column;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .order-header {
+            padding: 15px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .order-header h2 {
+            font-size: 18px;
+        }
+        
+        .order-header .edit-btn {
+            background-color: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .order-details {
+            padding: 20px;
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+        
+        .order-info {
+            margin-bottom: 20px;
+        }
+        
+        .order-info h3 {
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        
+        .customer-select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--light-gray);
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+        
+        .order-type {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .order-type-btn {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid var(--light-gray);
+            background-color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+        }
+        
+        .order-type-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        .order-items {
+            margin-bottom: 20px;
+        }
+        
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        .order-item:last-child {
+            border-bottom: none;
+        }
+        
+        .item-name {
+            flex-grow: 1;
+        }
+        
+        .item-price {
+            width: 80px;
+            text-align: right;
+        }
+        
+        .item-quantity {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            width: 100px;
+            justify-content: center;
+        }
+        
+        .quantity-btn {
+            width: 25px;
+            height: 25px;
+            border: 2px solid var(--light-gray);
+            background-color: rgb(152, 179, 236);
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        
+        .quantity-input {
+            width: 30px;
+            text-align: center;
+            border: 1px solid var(--light-gray);
+            border-radius: 3px;
+            padding: 3px;
+        }
+        
+        .remove-btn {
+            color: var(--accent-color);
+            background: none;
+            border: 5px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        
+        .discount-section {
+            margin-bottom: 20px;
+        }
+        
+        .discount-options {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .discount-type {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .discount-type-btn {
+            padding: 5px 10px;
+            background-color: var(--light-gray);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .discount-type-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .discount-input {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .discount-input input {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid var(--light-gray);
+            border-radius: 5px;
+        }
+        
+        .apply-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .totals {
+            background-color: var(--secondary-color);
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        
+        .total-row:last-child {
+            margin-bottom: 0;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .payment-btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s;
+        }
+        
+        .payment-btn:hover {
+            background-color: #e05555;
+        }
+        
+        /* Payment Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 400px;
+            max-width: 90%;
+        }
+        
+        .modal-header {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .modal-header h2 {
+            color: var(--primary-color);
+        }
+        
+        .payment-methods {
+            margin-bottom: 20px;
+        }
+        
+        .payment-method {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid var(--light-gray);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .payment-method:hover {
+            border-color: var(--primary-color);
+        }
+        
+        .payment-method.selected {
+            border-color: var(--primary-color);
+            background-color: rgba(74, 107, 255, 0.1);
+        }
+        
+        .payment-method input {
+            margin-right: 10px;
+        }
+        
+        .payment-amounts {
+            margin-bottom: 20px;
+        }
+        
+        .payment-amount {
+            margin-bottom: 10px;
+        }
+        
+        .payment-amount label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        
+        .payment-amount input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--light-gray);
+            border-radius: 5px;
+        }
+        
+        .change-amount {
+            padding: 10px;
+            background-color: var(--secondary-color);
+            border-radius: 5px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+            display: none;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .modal-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .confirm-btn {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .cancel-btn {
+            background-color: var(--light-gray);
+        }
+        
+        /* Receipt Modal */
+        .receipt-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .receipt-header h2 {
+            color: var(--primary-color);
+        }
+        
+        .receipt-body {
+            margin-bottom: 20px;
+        }
+        
+        .receipt-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+        
+        .receipt-total {
+            border-top: 1px dashed var(--dark-gray);
+            padding-top: 10px;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        
+        /* Item Management Modal */
+        .item-management-modal, .user-management-modal, .settings-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .item-management-content, .user-management-content, .settings-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 500px;
+            max-width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--light-gray);
+            border-radius: 5px;
+        }
+        
+        .form-group textarea {
+            min-height: 80px;
+        }
+        
+        .image-upload {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .image-preview {
+            width: 150px;
+            height: 150px;
+            border: 1px dashed var(--dark-gray);
+            border-radius: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+        
+        .image-preview img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+        
+        .upload-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        /* Navigation */
+        .nav-bar {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .nav-title {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .nav-btn {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .nav-btn:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        /* Reports Modal */
+        .reports-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .reports-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 800px;
+            max-width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .reports-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .reports-header h2 {
+            color: var(--primary-color);
+        }
+        
+        .close-reports {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        
+        .report-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .date-selector {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .date-input, .report-filter-select {
+            padding: 8px;
+            border: 1px solid var(--light-gray);
+            border-radius: 5px;
+        }
+        
+        .generate-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .export-btn {
+            background-color: var(--success-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .sales-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        
+        .sales-table th, .sales-table td {
+            border: 1px solid var(--light-gray);
+            padding: 8px;
+            text-align: left;
+        }
+        
+        .sales-table th {
+            background-color: var(--secondary-color);
+        }
+        
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .summary-card {
+            background-color: var(--secondary-color);
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        
+        .summary-card h3 {
+            font-size: 14px;
+            color: var(--dark-gray);
+            margin-bottom: 5px;
+        }
+        
+        .summary-card p {
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        /* Keypad Modal */
+        .keypad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .keypad-btn {
+            padding: 15px;
+            font-size: 18px;
+            border: 1px solid var(--light-gray);
+            background-color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .keypad-btn.clear {
+            background-color: var(--danger-color);
+            color: white;
+        }
+        
+        .keypad-btn.enter {
+            background-color: var(--success-color);
+            color: white;
+            grid-column: span 3;
+        }
+        
+        /* Tables Modal */
+        .tables-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .table-item {
+            border: 1px solid var(--light-gray);
+            border-radius: 5px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+        }
+        
+        .table-item.available {
+            background-color: rgba(40, 167, 69, 0.1);
+            border-color: var(--success-color);
+        }
+        
+        .table-item.unavailable {
+            background-color: rgba(220, 53, 69, 0.1);
+            border-color: var(--danger-color);
+        }
+        
+        /* User Management */
+        .users-list {
+            margin-bottom: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .user-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        .user-item:last-child {
+            border-bottom: none;
+        }
+        
+        .user-actions {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .user-action-btn {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        
+        .edit-btn {
+            background-color: var(--warning-color);
+            color: white;
+        }
+        
+        .delete-btn {
+            background-color: var(--danger-color);
+            color: white;
+        }
+        
+        /* Settings */
+        .settings-options {
+            margin-bottom: 20px;
+        }
+        
+        .settings-option {
+            margin-bottom: 15px;
+        }
+        
+        .settings-option h3 {
+            margin-bottom: 10px;
+        }
+        
+        .language-options {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .language-option {
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .language-option.selected {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        /* Notification */
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1001;
+            animation: slideIn 0.3s, fadeOut 0.5s 2s forwards;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+        
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+        
+        /* Responsive styles */
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+                height: auto;
+            }
+            
+            .menu-section, .order-section {
+                min-height: 50vh;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .menu-items {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+            
+            .summary-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .report-filters {
+                flex-direction: column;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="nav-bar">
+        <div class="nav-title" data-i18n="restaurant_pos">Restaurant POS</div>
+        <div class="nav-buttons">
+            <button class="nav-btn" id="newOrderBtn" data-i18n="new_order">New Order</button>
+            <button class="nav-btn" id="manageItemsBtn" data-i18n="manage_items">Manage Items</button>
+            <button class="nav-btn" id="manageUsersBtn" data-i18n="manage_users">Manage Users</button>
+            <button class="nav-btn" id="manageTablesBtn" data-i18n="manage_tables">Manage Tables</button>
+            <button class="nav-btn" id="settingsBtn" data-i18n="settings">Settings</button>
+            <button class="nav-btn" id="reportsBtn" data-i18n="sales_reports">Sales Reports</button>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="menu-section">
+            <div class="welcome-header">
+                <img src="" class="store-logo" id="storeLogo" alt="Store Logo">
+                <h1 data-i18n="welcome">Welcome, User</h1>
+                <p data-i18n="welcome_message">Welcome to system POS</p>
+            </div>
+            
+            <div class="search-bar">
+                <input type="text" id="searchInput" data-i18n-placeholder="search_items" placeholder="Search items...">
+                <i class="fas fa-search"></i>
+            </div>
+            
+            <h2 data-i18n="all_items">All items</h2>
+            <div class="category-tabs">
+                <div class="category-tab active" data-category="all" data-i18n="all">All</div>
+                <div class="category-tab" data-category="food" data-i18n="food">Food</div>
+                <div class="category-tab" data-category="drinks" data-i18n="drinks">Drinks</div>
+                <div class="category-tab" data-category="desserts" data-i18n="desserts">Desserts</div>
+            </div>
+            
+            <div class="menu-items" id="menuItems">
+                <!-- Menu items will be dynamically inserted here -->
+            </div>
+        </div>
+        
+        <div class="order-section">
+            <div class="order-header">
+                <h2 data-i18n="order">Order #<span id="orderNumber">654</span></h2>
+                <button class="edit-btn" id="editOrderBtn"><i class="fas fa-edit"></i> <span data-i18n="edit">Edit</span></button>
+            </div>
+            
+            <div class="order-details">
+                <div class="order-info">
+                    <h3 data-i18n="customer_info">Customer Information</h3>
+                    <select class="customer-select" id="customerSelect">
+                        <option value="" data-i18n="select_customer">Select Customer</option>
+                        <option value="walk-in" data-i18n="walk_in">Walk-in Customer</option>
+                        <option value="john">Pisith (VIP)</option>
+                        <option value="jane">Bora</option>
+                    </select>
+                    
+                    <div class="order-type">
+                        <button class="order-type-btn active" data-type="dine-in" id="dineInBtn" data-i18n="dine_in">Dine In</button>
+                        <button class="order-type-btn" data-type="takeaway" id="takeawayBtn" data-i18n="takeaway">Takeaway</button>
+                    </div>
+                    
+                    <select class="customer-select" id="tableSelect">
+                        <option value="" data-i18n="select_table">Select Table</option>
+                        <option value="1" data-status="available" data-i18n="table">Table 1</option>
+                        <option value="2" data-status="available" data-i18n="table">Table 2</option>
+                        <option value="3" data-status="available" data-i18n="table">Table 3</option>
+                        <option value="4" data-status="available" data-i18n="table">Table 4</option>
+                        <option value="5" data-status="available" data-i18n="table">Table 5</option>
+                    </select>
+                </div>
+                
+                <div class="order-items" id="orderItems">
+                    <!-- Order items will be dynamically inserted here -->
+                </div>
+                
+                <div class="discount-section">
+                    <h3 data-i18n="add_discount">Add Discount</h3>
+                    <div class="discount-type">
+                        <button class="discount-type-btn active" data-type="amount" data-i18n="amount">Amount ($)</button>
+                        <button class="discount-type-btn" data-type="percentage" data-i18n="percentage">Percentage (%)</button>
+                    </div>
+                    <div class="discount-options">
+                        <div class="discount-input">
+                            <input type="number" id="discountValue" data-i18n-placeholder="discount_value" placeholder="Discount value">
+                        </div>
+                        <button class="apply-btn" id="applyDiscount" data-i18n="apply">Apply</button>
+                    </div>
+                    <textarea id="orderNote" data-i18n-placeholder="note" placeholder="Note" style="width: 100%; margin-top: 10px; padding: 10px; border: 1px solid #e9ecef; border-radius: 5px; min-height: 60px;"></textarea>
+                </div>
+                
+                <div class="totals">
+                    <div class="total-row">
+                        <span data-i18n="subtotal">Subtotal</span>
+                        <span id="subtotal">$0.00</span>
+                    </div>
+                    <div class="total-row">
+                        <span data-i18n="discount">Discount</span>
+                        <span id="discount">-$0.00</span>
+                    </div>
+                    <div class="total-row">
+                        <span data-i18n="tax">Tax (10%)</span>
+                        <span id="tax">$0.00</span>
+                    </div>
+                    <div class="total-row">
+                        <span data-i18n="total">Total</span>
+                        <span id="total">$0.00</span>
+                    </div>
+                </div>
+                
+                <button class="payment-btn" id="paymentBtn" data-i18n="continue_to_payment">Continue To Payment</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Payment Modal -->
+    <div class="modal" id="paymentModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 data-i18n="payment_method">Payment Method</h2>
+            </div>
+            
+            <div class="payment-methods">
+                <div class="payment-method selected" data-method="cash">
+                    <input type="radio" name="paymentMethod" id="cashMethod" checked>
+                    <label for="cashMethod" data-i18n="cash">Cash</label>
+                </div>
+                <div class="payment-method" data-method="card">
+                    <input type="radio" name="paymentMethod" id="cardMethod">
+                    <label for="cardMethod" data-i18n="bank_transfer">Bank Transfer</label>
+                </div>
+                <div class="payment-method" data-method="mixed">
+                    <input type="radio" name="paymentMethod" id="mixedMethod">
+                    <label for="mixedMethod" data-i18n="mixed_payment">Mixed Payment</label>
+                </div>
+            </div>
+            
+            <div class="payment-amounts" id="paymentAmounts">
+                <div class="payment-amount">
+                    <label for="amountPaid" data-i18n="amount_paid">Amount Paid</label>
+                    <input type="number" id="amountPaid" data-i18n-placeholder="enter_amount" placeholder="Enter amount" readonly>
+                    <button class="keypad-btn" id="openKeypadCash" style="margin-top: 5px; width: 100%;" data-i18n="use_keypad">Use Keypad</button>
+                </div>
+                
+                <div class="payment-amount" id="cardAmountContainer" style="display: none;">
+                    <label for="cardAmount" data-i18n="bank_transfer_amount">Bank Transfer Amount</label>
+                    <input type="number" id="cardAmount" data-i18n-placeholder="enter_amount" placeholder="Enter amount" readonly>
+                    <button class="keypad-btn" id="openKeypadCard" style="margin-top: 5px; width: 100%;" data-i18n="use_keypad">Use Keypad</button>
+                </div>
+                
+                <div class="change-amount" id="changeAmount">
+                    <span data-i18n="change">Change</span>: $0.00
+                </div>
+            </div>
+            
+            <div class="modal-buttons">
+                <button class="modal-btn confirm-btn" id="confirmPayment" data-i18n="confirm_payment">Confirm Payment</button>
+                <button class="modal-btn cancel-btn" id="cancelPayment" data-i18n="cancel">Cancel</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Keypad Modal -->
+    <div class="modal" id="keypadModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 data-i18n="enter_amount">Enter Amount</h2>
+            </div>
+            
+            <div class="form-group">
+                <input type="text" id="keypadInput" style="font-size: 24px; text-align: right;" readonly>
+            </div>
+            
+            <div class="keypad">
+                <button class="keypad-btn" data-value="1">1</button>
+                <button class="keypad-btn" data-value="2">2</button>
+                <button class="keypad-btn" data-value="3">3</button>
+                <button class="keypad-btn" data-value="4">4</button>
+                <button class="keypad-btn" data-value="5">5</button>
+                <button class="keypad-btn" data-value="6">6</button>
+                <button class="keypad-btn" data-value="7">7</button>
+                <button class="keypad-btn" data-value="8">8</button>
+                <button class="keypad-btn" data-value="9">9</button>
+                <button class="keypad-btn" data-value=".">.</button>
+                <button class="keypad-btn" data-value="0">0</button>
+                <button class="keypad-btn clear" id="keypadClear" data-i18n="clear">Clear</button>
+                <button class="keypad-btn enter" id="keypadEnter" data-i18n="enter">Enter</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Receipt Modal -->
+    <div class="modal" id="receiptModal">
+        <div class="modal-content">
+            <div class="receipt-header">
+                <img src="" class="receipt-logo" id="receiptLogo" alt="Store Logo">
+                <h2 data-i18n="restaurant_pos">Restaurant POS</h2>
+                <p data-i18n="order">Order #<span id="receiptOrderNumber">1</span></p>
+                <p id="receiptDate">Sunday, 05 Jan, 2025</p>
+            </div>
+            
+            <div class="receipt-body" id="receiptBody">
+                <!-- Receipt items will be dynamically inserted here -->
+            </div>
+            
+            <div class="modal-buttons">
+                <button class="modal-btn print-btn" id="printReceipt" data-i18n="print_receipt">Print Receipt</button>
+                <button class="modal-btn close-btn" id="closeReceipt" data-i18n="close">Close</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Item Management Modal -->
+    <div class="item-management-modal" id="itemManagementModal">
+        <div class="item-management-content">
+            <div class="modal-header">
+                <h2 id="itemModalTitle" data-i18n="add_new_item">Add New Item</h2>
+            </div>
+            
+            <div class="form-group">
+                <label for="itemName" data-i18n="item_name">Item Name</label>
+                <input type="text" id="itemName" data-i18n-placeholder="enter_item_name" placeholder="Enter item name">
+            </div>
+            
+            <div class="form-group">
+                <label for="itemCategory" data-i18n="category">Category</label>
+                <select id="itemCategory">
+                    <option value="food" data-i18n="food">Food</option>
+                    <option value="drinks" data-i18n="drinks">Drinks</option>
+                    <option value="desserts" data-i18n="desserts">Desserts</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="itemPrice" data-i18n="price">Price</label>
+                <input type="number" id="itemPrice" data-i18n-placeholder="enter_price" placeholder="Enter price" step="0.01">
+            </div>
+            
+            <div class="form-group">
+                <label for="itemDescription" data-i18n="description">Description</label>
+                <textarea id="itemDescription" data-i18n-placeholder="enter_description" placeholder="Enter description"></textarea>
+            </div>
+            
+            <div class="image-upload">
+                <div class="image-preview" id="imagePreview">
+                    <i class="fas fa-image" style="font-size: 40px; color: #ccc;"></i>
+                </div>
+                <input type="file" id="itemImage" accept="image/*" style="display: none;">
+                <button class="upload-btn" id="uploadImageBtn" data-i18n="upload_image">Upload Image</button>
+            </div>
+            
+            <div class="form-group">
+                <label for="itemAvailability" data-i18n="availability">Availability</label>
+                <select id="itemAvailability">
+                    <option value="true" data-i18n="available">Available</option>
+                    <option value="false" data-i18n="not_available">Not Available</option>
+                </select>
+            </div>
+            
+            <div class="form-actions">
+                <button class="modal-btn cancel-btn" id="cancelItem" data-i18n="cancel">Cancel</button>
+                <button class="modal-btn confirm-btn" id="saveItem" data-i18n="save_item">Save Item</button>
+                <button class="modal-btn" id="deleteItem" style="background-color: var(--accent-color); color: white; display: none;" data-i18n="delete_item">Delete Item</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- User Management Modal -->
+    <div class="user-management-modal" id="userManagementModal">
+        <div class="user-management-content">
+            <div class="modal-header">
+                <h2 data-i18n="manage_users">Manage Users</h2>
+            </div>
+            
+            <div class="users-list" id="usersList">
+                <!-- Users will be dynamically inserted here -->
+            </div>
+            
+            <button class="modal-btn confirm-btn" id="addUserBtn" data-i18n="add_user">Add User</button>
+            
+            <div class="form-actions">
+                <button class="modal-btn cancel-btn" id="closeUserManagement" data-i18n="close">Close</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Add/Edit User Modal -->
+    <div class="modal" id="userFormModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="userModalTitle" data-i18n="add_user">Add User</h2>
+            </div>
+            
+            <div class="form-group">
+                <label for="userName" data-i18n="username">Username</label>
+                <input type="text" id="userName" data-i18n-placeholder="enter_username" placeholder="Enter username">
+            </div>
+            
+            <div class="form-group">
+                <label for="userPassword" data-i18n="password">Password</label>
+                <input type="password" id="userPassword" data-i18n-placeholder="enter_password" placeholder="Enter password">
+            </div>
+            
+            <div class="form-group">
+                <label for="userRole" data-i18n="role">Role</label>
+                <select id="userRole">
+                    <option value="admin" data-i18n="admin">Admin</option>
+                    <option value="manager" data-i18n="manager">Manager</option>
+                    <option value="staff" data-i18n="staff">Staff</option>
+                    <option value="cashier" data-i18n="cashier">Cashier</option>
+                </select>
+            </div>
+            
+            <div class="form-actions">
+                <button class="modal-btn cancel-btn" id="cancelUserForm" data-i18n="cancel">Cancel</button>
+                <button class="modal-btn confirm-btn" id="saveUser" data-i18n="save_user">Save User</button>
+                <button class="modal-btn" id="deleteUser" style="background-color: var(--accent-color); color: white; display: none;" data-i18n="delete_user">Delete User</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Tables Management Modal -->
+    <div class="modal" id="tablesModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 data-i18n="manage_tables">Manage Tables</h2>
+            </div>
+            
+            <div class="tables-grid" id="tablesGrid">
+                <!-- Tables will be dynamically inserted here -->
+            </div>
+            
+            <div class="form-group">
+                <label for="newTableNumber" data-i18n="add_table">Add New Table</label>
+                <input type="number" id="newTableNumber" data-i18n-placeholder="table_number" placeholder="Table number" min="1">
+            </div>
+            
+            <div class="form-actions">
+                <button class="modal-btn confirm-btn" id="addTableBtn" data-i18n="add_table">Add Table</button>
+                <button class="modal-btn cancel-btn" id="closeTablesModal" data-i18n="close">Close</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Reports Modal -->
+    <div class="reports-modal" id="reportsModal">
+        <div class="reports-content">
+            <div class="reports-header">
+                <h2 data-i18n="sales_reports">Sales Reports</h2>
+                <button class="close-reports" id="closeReports">&times;</button>
+            </div>
+            
+            <div class="report-filters">
+                <div class="date-selector">
+                    <input type="date" class="date-input" id="startDate">
+                    <span data-i18n="to">to</span>
+                    <input type="date" class="date-input" id="endDate">
+                </div>
+                
+                <select class="report-filter-select" id="reportCategoryFilter">
+                    <option value="all" data-i18n="all_categories">All Categories</option>
+                    <option value="food" data-i18n="food">Food</option>
+                    <option value="drinks" data-i18n="drinks">Drinks</option>
+                    <option value="desserts" data-i18n="desserts">Desserts</option>
+                </select>
+                
+                <select class="report-filter-select" id="reportPaymentFilter">
+                    <option value="all" data-i18n="all_payments">All Payment Methods</option>
+                    <option value="cash" data-i18n="cash">Cash</option>
+                    <option value="card" data-i18n="bank_transfer">Bank Transfer</option>
+                    <option value="mixed" data-i18n="mixed_payment">Mixed Payment</option>
+                </select>
+                
+                <button class="generate-btn" id="generateReport" data-i18n="generate">Generate</button>
+                <button class="export-btn" id="exportReport" data-i18n="export_csv">Export CSV</button>
+            </div>
+            
+            <div class="summary-cards">
+                <div class="summary-card">
+                    <h3 data-i18n="total_sales">Total Sales</h3>
+                    <p id="totalSales">$0.00</p>
+                </div>
+                <div class="summary-card">
+                    <h3 data-i18n="total_orders">Total Orders</h3>
+                    <p id="totalOrders">0</p>
+                </div>
+                <div class="summary-card">
+                    <h3 data-i18n="average_order">Average Order</h3>
+                    <p id="averageOrder">$0.00</p>
+                </div>
+            </div>
+            
+            <table class="sales-table">
+                <thead>
+                    <tr>
+                        <th data-i18n="order">Order #</th>
+                        <th data-i18n="date">Date</th>
+                        <th data-i18n="customer">Customer</th>
+                        <th data-i18n="payment_method">Payment Method</th>
+                        <th data-i18n="items">Items</th>
+                        <th data-i18n="total">Total</th>
+                    </tr>
+                </thead>
+                <tbody id="salesTableBody">
+                    <!-- Sales data will be dynamically inserted here -->
+                </tbody>
+            </table>
+            
+            <button class="modal-btn print-btn" id="printReport" data-i18n="print_report">Print Report</button>
+        </div>
+    </div>
+    
+    <!-- Settings Modal -->
+    <div class="settings-modal" id="settingsModal">
+        <div class="settings-content">
+            <div class="modal-header">
+                <h2 data-i18n="settings">Settings</h2>
+            </div>
+            
+            <div class="settings-options">
+                <div class="settings-option">
+                    <h3 data-i18n="language">Language</h3>
+                    <div class="language-options">
+                        <div class="language-option selected" data-lang="en" id="langEn">English</div>
+                        <div class="language-option" data-lang="km" id="langKm">ភាសាខ្មែរ</div>
+                        <div class="language-option" data-lang="zh" id="langZh">中文</div>
+                    </div>
+                </div>
+                
+                <div class="settings-option">
+                    <h3 data-i18n="store_logo">Store Logo</h3>
+                    <div class="image-upload">
+                        <div class="image-preview" id="storeLogoPreview">
+                            <i class="fas fa-image" style="font-size: 40px; color: #ccc;"></i>
+                        </div>
+                        <input type="file" id="storeLogoInput" accept="image/*" style="display: none;">
+                        <button class="upload-btn" id="uploadStoreLogo" data-i18n="upload_logo">Upload Logo</button>
+                    </div>
+                </div>
+                
+                <div class="settings-option">
+                    <h3 data-i18n="data_management">Data Management</h3>
+                    <div class="form-actions">
+                        <button class="modal-btn" id="backupData" style="background-color: var(--success-color); color: white;" data-i18n="backup_data">Backup Data</button>
+                        <button class="modal-btn" id="restoreData" style="background-color: var(--warning-color); color: white;" data-i18n="restore_data">Restore Data</button>
+                        <button class="modal-btn" id="resetData" style="background-color: var(--danger-color); color: white;" data-i18n="reset_data">Reset Data</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-actions">
+                <button class="modal-btn cancel-btn" id="closeSettings" data-i18n="close">Close</button>
+                <button class="modal-btn confirm-btn" id="saveSettings" data-i18n="save_settings">Save Settings</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // SQLite database using localStorage
+        class Database {
+            constructor() {
+                this.dbName = 'restaurant_pos_db';
+                this.initializeDB();
+            }
+            
+            initializeDB() {
+                if (!localStorage.getItem(this.dbName)) {
+                    const initialData = {
+                        menuItems: [
+                            { id: 1, name: "Chocolate Blueberry", description: "Delicious chocolate with blueberry flavor", price: 10.00, category: "desserts", available: true, image: "https://images.unsplash.com/photo-1571115177098-24ec42ed204d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" },
+                            { id: 2, name: "Vanilla Chocolate", description: "Vanilla flavored chocolate", price: 10.00, category: "desserts", available: true, image: "https://images.unsplash.com/photo-1509482560494-4126f8225994?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" },
+                            { id: 3, name: "Americano", description: "Classic Americano coffee", price: 5.00, category: "drinks", available: true, image: "https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" },
+                            { id: 4, name: "Sweet Granulated Sugar Croissant", description: "Sweet croissant with sugar", price: 12.00, category: "desserts", available: true, image: "https://images.unsplash.com/photo-1552590635-27c2c2128abf?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" },
+                            { id: 5, name: "Vegetarian Meal", description: "Healthy vegetarian dish", price: 40.00, category: "food", available: true, image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" },
+                            { id: 6, name: "Chicken Noodles", description: "Delicious chicken noodles", price: 42.00, category: "food", available: true, image: "https://images.unsplash.com/photo-1559847844-5315695dadae?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" },
+                            { id: 7, name: "Burger Creamy Mushroom", description: "Burger with creamy mushroom sauce", price: 45.00, category: "food", available: true, image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" },
+                            { id: 8, name: "Pizza Sweet Corn", description: "Pizza with sweet corn topping", price: 120.00, category: "food", available: true, image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" },
+                            { id: 9, name: "Pure Tango Oil", description: "Refreshing tango drink", price: 150.00, category: "drinks", available: true, image: "https://images.unsplash.com/photo-1551029506-0807df4e2031?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" },
+                            { id: 10, name: "Burger Spicy Tandoori", description: "Spicy tandoori burger", price: 40.00, category: "food", available: true, image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" }
+                        ],
+                        salesData: [
+                            { id: 1, orderNumber: 654, date: new Date().toISOString(), customer: "Walk-in", paymentMethod: "cash", items: ["Pizza Sweet Corn", "Chocolate Blueberry"], total: 130.00, itemsData: [{id: 8, quantity: 1}, {id: 1, quantity: 1}] },
+                            { id: 2, orderNumber: 653, date: new Date(Date.now() - 86400000).toISOString(), customer: "Pisith", paymentMethod: "card", items: ["Burger Creamy Mushroom", "Americano"], total: 50.00, itemsData: [{id: 7, quantity: 1}, {id: 3, quantity: 1}] },
+                            { id: 3, orderNumber: 652, date: new Date(Date.now() - 172800000).toISOString(), customer: "Bora", paymentMethod: "mixed", items: ["Chicken Noodles", "Vanilla Chocolate"], total: 52.00, itemsData: [{id: 6, quantity: 1}, {id: 2, quantity: 1}] }
+                        ],
+                        users: [
+                            { id: 1, username: "admin", password: "admin123", role: "admin" },
+                            { id: 2, username: "manager", password: "manager123", role: "manager" },
+                            { id: 3, username: "cashier", password: "cashier123", role: "cashier" }
+                        ],
+                        tables: [
+                            { id: 1, number: "1", status: "available" },
+                            { id: 2, number: "2", status: "available" },
+                            { id: 3, number: "3", status: "available" },
+                            { id: 4, number: "4", status: "available" },
+                            { id: 5, number: "5", status: "available" }
+                        ],
+                        settings: {
+                            taxRate: 10,
+                            language: 'en',
+                            storeLogo: ''
+                        }
+                    };
+                    localStorage.setItem(this.dbName, JSON.stringify(initialData));
+                }
+            }
+            
+            getData() {
+                return JSON.parse(localStorage.getItem(this.dbName));
+            }
+            
+            saveData(data) {
+                localStorage.setItem(this.dbName, JSON.stringify(data));
+            }
+            
+            getMenuItems() {
+                return this.getData().menuItems;
+            }
+            
+            getSalesData() {
+                return this.getData().salesData;
+            }
+            
+            getUsers() {
+                return this.getData().users;
+            }
+            
+            getTables() {
+                return this.getData().tables;
+            }
+            
+            getSettings() {
+                return this.getData().settings;
+            }
+            
+            saveMenuItem(item) {
+                const data = this.getData();
+                if (item.id) {
+                    // Update existing item
+                    const index = data.menuItems.findIndex(i => i.id === item.id);
+                    if (index !== -1) {
+                        data.menuItems[index] = item;
+                    }
+                } else {
+                    // Add new item
+                    const newId = data.menuItems.length > 0 ? Math.max(...data.menuItems.map(i => i.id)) + 1 : 1;
+                    item.id = newId;
+                    data.menuItems.push(item);
+                }
+                this.saveData(data);
+                return item;
+            }
+            
+            deleteMenuItem(id) {
+                const data = this.getData();
+                data.menuItems = data.menuItems.filter(item => item.id !== id);
+                this.saveData(data);
+            }
+            
+            saveSale(sale) {
+                const data = this.getData();
+                if (sale.id) {
+                    // Update existing sale (not typically needed)
+                    const index = data.salesData.findIndex(s => s.id === sale.id);
+                    if (index !== -1) {
+                        data.salesData[index] = sale;
+                    }
+                } else {
+                    // Add new sale
+                    const newId = data.salesData.length > 0 ? Math.max(...data.salesData.map(s => s.id)) + 1 : 1;
+                    sale.id = newId;
+                    sale.orderNumber = this.generateOrderNumber();
+                    data.salesData.unshift(sale);
+                }
+                this.saveData(data);
+                return sale;
+            }
+            
+            generateOrderNumber() {
+                const data = this.getData();
+                if (data.salesData.length === 0) return 1000;
+                return Math.max(...data.salesData.map(sale => sale.orderNumber)) + 1;
+            }
+            
+            saveUser(user) {
+                const data = this.getData();
+                if (user.id) {
+                    // Update existing user
+                    const index = data.users.findIndex(u => u.id === user.id);
+                    if (index !== -1) {
+                        data.users[index] = user;
+                    }
+                } else {
+                    // Add new user
+                    const newId = data.users.length > 0 ? Math.max(...data.users.map(u => u.id)) + 1 : 1;
+                    user.id = newId;
+                    data.users.push(user);
+                }
+                this.saveData(data);
+                return user;
+            }
+            
+            deleteUser(id) {
+                const data = this.getData();
+                data.users = data.users.filter(user => user.id !== id);
+                this.saveData(data);
+            }
+            
+            saveTable(table) {
+                const data = this.getData();
+                if (table.id) {
+                    // Update existing table
+                    const index = data.tables.findIndex(t => t.id === table.id);
+                    if (index !== -1) {
+                        data.tables[index] = table;
+                    }
+                } else {
+                    // Add new table
+                    const newId = data.tables.length > 0 ? Math.max(...data.tables.map(t => t.id)) + 1 : 1;
+                    table.id = newId;
+                    data.tables.push(table);
+                }
+                this.saveData(data);
+                return table;
+            }
+            
+            deleteTable(id) {
+                const data = this.getData();
+                data.tables = data.tables.filter(table => table.id !== id);
+                this.saveData(data);
+            }
+            
+            updateSettings(settings) {
+                const data = this.getData();
+                data.settings = { ...data.settings, ...settings };
+                this.saveData(data);
+            }
+            
+            backupData() {
+                const data = this.getData();
+                const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `pos_backup_${new Date().toISOString().split('T')[0]}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }
+            
+            restoreData(file) {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        try {
+                            const data = JSON.parse(event.target.result);
+                            localStorage.setItem(this.dbName, JSON.stringify(data));
+                            resolve(true);
+                        } catch (error) {
+                            reject(error);
+                        }
+                    };
+                    reader.onerror = () => reject(new Error('Error reading file'));
+                    reader.readAsText(file);
+                });
+            }
+            
+            resetData() {
+                localStorage.removeItem(this.dbName);
+                this.initializeDB();
+                return true;
+            }
+        }
+
+        // Language translations
+        const translations = {
+            en: {
+                restaurant_pos: "Restaurant POS",
+                new_order: "New Order",
+                manage_items: "Manage Items",
+                manage_users: "Manage Users",
+                manage_tables: "Manage Tables",
+                sales_reports: "Sales Reports",
+                settings: "Settings",
+                welcome: "Welcome, User",
+                welcome_message: "Welcome to system POS",
+                search_items: "Search items...",
+                all_items: "All items",
+                all: "All",
+                food: "Food",
+                drinks: "Drinks",
+                desserts: "Desserts",
+                order: "Order #",
+                edit: "Edit",
+                customer_info: "Customer Information",
+                select_customer: "Select Customer",
+                walk_in: "Walk-in Customer",
+                select_table: "Select Table",
+                table: "Table",
+                dine_in: "Dine In",
+                takeaway: "Takeaway",
+                add_discount: "Add Discount",
+                amount: "Amount ($)",
+                percentage: "Percentage (%)",
+                discount_value: "Discount value",
+                apply: "Apply",
+                note: "Note",
+                subtotal: "Subtotal",
+                discount: "Discount",
+                tax: "Tax (10%)",
+                total: "Total",
+                continue_to_payment: "Continue To Payment",
+                payment_method: "Payment Method",
+                cash: "Cash",
+                bank_transfer: "Bank Transfer",
+                mixed_payment: "Mixed Payment",
+                amount_paid: "Amount Paid",
+                enter_amount: "Enter amount",
+                bank_transfer_amount: "Bank Transfer Amount",
+                change: "Change",
+                confirm_payment: "Confirm Payment",
+                cancel: "Cancel",
+                print_receipt: "Print Receipt",
+                close: "Close",
+                add_new_item: "Add New Item",
+                item_name: "Item Name",
+                enter_item_name: "Enter item name",
+                category: "Category",
+                price: "Price",
+                enter_price: "Enter price",
+                description: "Description",
+                enter_description: "Enter description",
+                upload_image: "Upload Image",
+                availability: "Availability",
+                available: "Available",
+                not_available: "Not Available",
+                save_item: "Save Item",
+                delete_item: "Delete Item",
+                add_user: "Add User",
+                username: "Username",
+                enter_username: "Enter username",
+                password: "Password",
+                enter_password: "Enter password",
+                role: "Role",
+                admin: "Admin",
+                manager: "Manager",
+                staff: "Staff",
+                cashier: "Cashier",
+                save_user: "Save User",
+                delete_user: "Delete User",
+                total_sales: "Total Sales",
+                total_orders: "Total Orders",
+                average_order: "Average Order",
+                to: "to",
+                generate: "Generate",
+                export_csv: "Export CSV",
+                date: "Date",
+                customer: "Customer",
+                items: "Items",
+                print_report: "Print Report",
+                language: "Language",
+                store_logo: "Store Logo",
+                upload_logo: "Upload Logo",
+                data_management: "Data Management",
+                backup_data: "Backup Data",
+                restore_data: "Restore Data",
+                reset_data: "Reset Data",
+                save_settings: "Save Settings",
+                all_categories: "All Categories",
+                all_payments: "All Payments",
+                item_added: "Item added to order",
+                item_unavailable: "This item is currently not available",
+                select_table_first: "Please select a table for this order",
+                add_items_first: "Please add items to the order before proceeding to payment",
+                enter_valid_discount: "Please enter a valid discount value",
+                percentage_range: "Percentage discount must be between 0 and 100",
+                enter_amount_paid: "Please enter amount paid",
+                enter_card_amount: "Please enter bank transfer amount",
+                both_amounts: "Please enter amounts for both payment methods",
+                amount_less: "Amount paid is less than the total amount due",
+                confirm_delete: "Are you sure you want to delete this item?",
+                confirm_delete_user: "Are you sure you want to delete this user?",
+                confirm_delete_table: "Are you sure you want to delete this table?",
+                confirm_reset: "Are you sure you want to reset all data? This cannot be undone.",
+                fill_required: "Please fill in all required fields",
+                use_keypad: "Use Keypad",
+                enter_amount_keypad: "Enter amount using keypad",
+                table_number: "Table number",
+                add_table: "Add Table",
+                available: "Available",
+                unavailable: "Unavailable",
+                mark_available: "Mark as Available",
+                mark_unavailable: "Mark as Unavailable",
+                thank_you: "Thank you for your visit!",
+                paid: "Paid"
+            },
+            km: {
+                restaurant_pos: "ប្រព័ន្ធគ្រប់គ្រងហាងអាហារ",
+                new_order: "ការកម្មង់ថ្មី",
+                manage_items: "គ្រប់គ្រងមុខម្ហូប",
+                manage_users: "គ្រប់គ្រងអ្នកប្រើប្រាស់",
+                manage_tables: "គ្រប់គ្រងតុ",
+                sales_reports: "របាយការណ៍លក់",
+                settings: "ការកំណត់",
+                welcome: "សូមស្វាគមន៍, អ្នកប្រើប្រាស់",
+                welcome_message: "សូមស្វាគមន៍មកកាន់ប្រព័ន្ធ POS",
+                search_items: "ស្វែងរកមុខម្ហូប...",
+                all_items: "មុខម្ហូបទាំងអស់",
+                all: "ទាំងអស់",
+                food: "ម្ហូប",
+                drinks: "ភេសជ្ជៈ",
+                desserts: "បង្អែម",
+                order: "ការកម្មង់ #",
+                edit: "កែសម្រួល",
+                customer_info: "ព័ត៌មានអតិថិជន",
+                select_customer: "ជ្រើសរើសអតិថិជន",
+                walk_in: "អតិថិជនដែលមកដល់ហាង",
+                select_table: "ជ្រើសរើសតុ",
+                table: "តុ",
+                dine_in: "អង្គុយញ៉ាំក្នុងហាង",
+                takeaway: "យកចេញ",
+                add_discount: "បន្ថែមការបញ្ចុះតម្លៃ",
+                amount: "ចំនួនទឹកប្រាក់ ($)",
+                percentage: "ភាគរយ (%)",
+                discount_value: "តម្លៃបញ្ចុះតម្លៃ",
+                apply: "អនុវត្ត",
+                note: "កំណត់ចំណាំ",
+                subtotal: "សរុបរង",
+                discount: "បញ្ចុះតម្លៃ",
+                tax: "ពន្ធ (10%)",
+                total: "សរុប",
+                continue_to_payment: "បន្តទៅការទូទាត់",
+                payment_method: "វិធីសាបព្រោះ",
+                cash: "សាច់ប្រាក់",
+                bank_transfer: "ការផ្ទេរប្រាក់តាមធនាគារ",
+                mixed_payment: "ការទូទាត់ចម្រុះ",
+                amount_paid: "ចំនួនទឹកប្រាក់ដែលបានបង់",
+                enter_amount: "បញ្ចូលចំនួនទឹកប្រាក់",
+                bank_transfer_amount: "ចំនួនទឹកប្រាក់ផ្ទេរតាមធនាគារ",
+                change: "អាប់ដេវ",
+                confirm_payment: "បញ្ជាក់ការទូទាត់",
+                cancel: "បោះបង់",
+                print_receipt: "បោះពុម្ពបង្កាន់ដៃ",
+                close: "បិទ",
+                add_new_item: "បន្ថែមមុខម្ហូបថ្មី",
+                item_name: "ឈ្មោះមុខម្ហូប",
+                enter_item_name: "បញ្ចូលឈ្មោះមុខម្ហូប",
+                category: "ប្រភេទ",
+                price: "តម្លៃ",
+                enter_price: "បញ្ចូលតម្លៃ",
+                description: "ការពិពណ៌នា",
+                enter_description: "បញ្ចូលការពិពណ៌នា",
+                upload_image: "ផ្ទុករូបភាព",
+                availability: "ភាពអាចរកបាន",
+                available: "អាចរកបាន",
+                not_available: "មិនអាចរកបាន",
+                save_item: "រក្សាទុកមុខម្ហូប",
+                delete_item: "លុបមុខម្ហូប",
+                add_user: "បន្ថែមអ្នកប្រើប្រាស់",
+                username: "ឈ្មោះអ្នកប្រើប្រាស់",
+                enter_username: "បញ្ចូលឈ្មោះអ្នកប្រើប្រាស់",
+                password: "ពាក្យសម្ងាត់",
+                enter_password: "បញ្ចូលពាក្យសម្ងាត់",
+                role: "តួនាទី",
+                admin: "អ្នកគ្រប់គ្រង",
+                manager: "អ្នកគ្រប់គ្រងហាង",
+                staff: "បុគ្គលិក",
+                cashier: "អ្នកបង់ប្រាក់",
+                save_user: "រក្សាទុកអ្នកប្រើប្រាស់",
+                delete_user: "លុបអ្នកប្រើប្រាស់",
+                total_sales: "ការលក់សរុប",
+                total_orders: "ការកម្មង់សរុប",
+                average_order: "ការកម្មង់មធ្យម",
+                to: "ដល់",
+                generate: "បង្កើត",
+                export_csv: "នាំចេញ CSV",
+                date: "កាលបរិច្ឆេទ",
+                customer: "អតិថិជន",
+                items: "មុខម្ហូប",
+                print_report: "បោះពុម្ពរបាយការណ៍",
+                language: "ភាសា",
+                store_logo: "ឡូហ្គោហាង",
+                upload_logo: "ផ្ទុកឡូហ្គោ",
+                data_management: "ការគ្រប់គ្រងទិន្នន័យ",
+                backup_data: "បម្រុងទុកទិន្នន័យ",
+                restore_data: "ស្ដារទិន្នន័យ",
+                reset_data: "កំណត់ទិន្នន័យឡើងវិញ",
+                save_settings: "រក្សាទុកការកំណត់",
+                all_categories: "ប្រភេទទាំងអស់",
+                all_payments: "វិធីសាបព្រោះទាំងអស់",
+                item_added: "មុខម្ហូបត្រូវបានបន្ថែមទៅការកម្មង់",
+                item_unavailable: "មុខម្ហូបនេះបច្ចុប្បន្នមិនអាចរកបានទេ",
+                select_table_first: "សូមជ្រើសរើសតុសម្រាប់ការកម្មង់នេះ",
+                add_items_first: "សូមបន្ថែមមុខម្ហូបទៅការកម្មង់មុនពេលបន្តទៅការទូទាត់",
+                enter_valid_discount: "សូមបញ្ចូលតម្លៃបញ្ចុះតម្លៃត្រឹមត្រូវ",
+                percentage_range: "ការបញ្ចុះតម្លៃជាភាគរយត្រូវតែមានចន្លោះពី 0 ដល់ 100",
+                enter_amount_paid: "សូមបញ្ចូលចំនួនទឹកប្រាក់ដែលបានបង់",
+                enter_card_amount: "សូមបញ្ចូលចំនួនទឹកប្រាក់ផ្ទេរតាមធនាគារ",
+                both_amounts: "សូមបញ្ចូលចំនួនទឹកប្រាក់សម្រាប់វិធីសាបព្រោះទាំងពីរ",
+                amount_less: "ចំនួនទឹកប្រាក់ដែលបានបង់តិចជាងចំនួនសរុបដែលត្រូវបង់",
+                confirm_delete: "តើអ្នកប្រាកដថាចង់លុបមុខម្ហូបនេះមែនទេ?",
+                confirm_delete_user: "តើអ្នកប្រាកដថាចង់លុបអ្នកប្រើប្រាស់នេះមែនទេ?",
+                confirm_delete_table: "តើអ្នកប្រាកដថាចង់លុបតុនេះមែនទេ?",
+                confirm_reset: "តើអ្នកប្រាកដថាចង់កំណត់ទិន្នន័យឡើងវិញទាំងអស់មែនទេ? នេះមិនអាចត្រឡប់វិញបានទេ។",
+                fill_required: "សូមបំពេញគ្រប់ផ្នែកដែលត្រូវការ",
+                use_keypad: "ប្រើប្រាស់ក្ដារលេខ",
+                enter_amount_keypad: "បញ្ចូលចំនួនទឹកប្រាក់ដោយប្រើក្ដារលេខ",
+                table_number: "លេខតុ",
+                add_table: "បន្ថែមតុ",
+                available: "អាចប្រើបាន",
+                unavailable: "មិនអាចប្រើបាន",
+                mark_available: "សម្គាល់ថាអាចប្រើបាន",
+                mark_unavailable: "សម្គាល់ថាមិនអាចប្រើបាន",
+                thank_you: "សូមអរគុណសម្រាប់ការមកដល់របស់អ្នក!",
+                paid: "បានបង់"
+            },
+            zh: {
+                restaurant_pos: "餐厅POS系统",
+                new_order: "新订单",
+                manage_items: "管理菜品",
+                manage_users: "管理用户",
+                manage_tables: "管理餐桌",
+                sales_reports: "销售报告",
+                settings: "设置",
+                welcome: "欢迎, 用户",
+                welcome_message: "欢迎使用POS系统",
+                search_items: "搜索菜品...",
+                all_items: "所有菜品",
+                all: "全部",
+                food: "食物",
+                drinks: "饮料",
+                desserts: "甜点",
+                order: "订单 #",
+                edit: "编辑",
+                customer_info: "顾客信息",
+                select_customer: "选择顾客",
+                walk_in: "散客",
+                select_table: "选择桌子",
+                table: "桌子",
+                dine_in: "堂食",
+                takeaway: "外卖",
+                add_discount: "添加折扣",
+                amount: "金额 ($)",
+                percentage: "百分比 (%)",
+                discount_value: "折扣值",
+                apply: "应用",
+                note: "备注",
+                subtotal: "小计",
+                discount: "折扣",
+                tax: "税 (10%)",
+                total: "总计",
+                continue_to_payment: "继续付款",
+                payment_method: "付款方式",
+                cash: "现金",
+                bank_transfer: "银行转账",
+                mixed_payment: "混合支付",
+                amount_paid: "已付金额",
+                enter_amount: "输入金额",
+                bank_transfer_amount: "银行转账金额",
+                change: "找零",
+                confirm_payment: "确认付款",
+                cancel: "取消",
+                print_receipt: "打印收据",
+                close: "关闭",
+                add_new_item: "添加新菜品",
+                item_name: "菜品名称",
+                enter_item_name: "输入菜品名称",
+                category: "类别",
+                price: "价格",
+                enter_price: "输入价格",
+                description: "描述",
+                enter_description: "输入描述",
+                upload_image: "上传图片",
+                availability: "可用性",
+                available: "可用",
+                not_available: "不可用",
+                save_item: "保存菜品",
+                delete_item: "删除菜品",
+                add_user: "添加用户",
+                username: "用户名",
+                enter_username: "输入用户名",
+                password: "密码",
+                enter_password: "输入密码",
+                role: "角色",
+                admin: "管理员",
+                manager: "经理",
+                staff: "员工",
+                cashier: "收银员",
+                save_user: "保存用户",
+                delete_user: "删除用户",
+                total_sales: "总销售额",
+                total_orders: "总订单数",
+                average_order: "平均订单",
+                to: "至",
+                generate: "生成",
+                export_csv: "导出CSV",
+                date: "日期",
+                customer: "顾客",
+                items: "项目",
+                print_report: "打印报告",
+                language: "语言",
+                store_logo: "店铺标志",
+                upload_logo: "上传标志",
+                data_management: "数据管理",
+                backup_data: "备份数据",
+                restore_data: "恢复数据",
+                reset_data: "重置数据",
+                save_settings: "保存设置",
+                all_categories: "所有类别",
+                all_payments: "所有付款方式",
+                item_added: "菜品已添加到订单",
+                item_unavailable: "此菜品目前不可用",
+                select_table_first: "请为此订单选择一张桌子",
+                add_items_first: "请在继续付款前添加菜品到订单",
+                enter_valid_discount: "请输入有效的折扣值",
+                percentage_range: "百分比折扣必须在0到100之间",
+                enter_amount_paid: "请输入已付金额",
+                enter_card_amount: "请输入银行转账金额",
+                both_amounts: "请输入两种付款方式的金额",
+                amount_less: "已付金额少于应付总额",
+                confirm_delete: "您确定要删除此菜品吗？",
+                confirm_delete_user: "您确定要删除此用户吗？",
+                confirm_delete_table: "您确定要删除此桌子吗？",
+                confirm_reset: "您确定要重置所有数据吗？此操作无法撤消。",
+                fill_required: "请填写所有必填字段",
+                use_keypad: "使用数字键盘",
+                enter_amount_keypad: "使用数字键盘输入金额",
+                table_number: "桌号",
+                add_table: "添加桌子",
+                available: "可用",
+                unavailable: "不可用",
+                mark_available: "标记为可用",
+                mark_unavailable: "标记为不可用",
+                thank_you: "感谢您的光临！",
+                paid: "已支付"
+            }
+        };
+
+        // Current language
+        let currentLanguage = 'en';
+        
+        // Initialize database
+        const db = new Database();
+        
+        // Current order
+        let currentOrder = {
+            items: [],
+            customer: "",
+            table: "",
+            orderType: "dine-in", // 'dine-in' or 'takeaway'
+            discount: 0,
+            discountType: "amount", // 'amount' or 'percentage'
+            note: "",
+            date: new Date(),
+            orderNumber: db.generateOrderNumber()
+        };
+        
+        // Current item being edited (for management)
+        let currentItem = null;
+        let currentUser = null;
+        let currentTable = null;
+        let currentKeypadTarget = null;
+        
+        // DOM elements
+        const menuItemsContainer = document.getElementById('menuItems');
+        const orderItemsContainer = document.getElementById('orderItems');
+        const subtotalElement = document.getElementById('subtotal');
+        const discountElement = document.getElementById('discount');
+        const taxElement = document.getElementById('tax');
+        const totalElement = document.getElementById('total');
+        const customerSelect = document.getElementById('customerSelect');
+        const tableSelect = document.getElementById('tableSelect');
+        const dineInBtn = document.getElementById('dineInBtn');
+        const takeawayBtn = document.getElementById('takeawayBtn');
+        const discountValueInput = document.getElementById('discountValue');
+        const orderNoteInput = document.getElementById('orderNote');
+        const applyDiscountBtn = document.getElementById('applyDiscount');
+        const paymentBtn = document.getElementById('paymentBtn');
+        const paymentModal = document.getElementById('paymentModal');
+        const receiptModal = document.getElementById('receiptModal');
+        const receiptBody = document.getElementById('receiptBody');
+        const printReceiptBtn = document.getElementById('printReceipt');
+        const closeReceiptBtn = document.getElementById('closeReceipt');
+        const orderNumberElement = document.getElementById('orderNumber');
+        const receiptOrderNumberElement = document.getElementById('receiptOrderNumber');
+        const receiptDateElement = document.getElementById('receiptDate');
+        const newOrderBtn = document.getElementById('newOrderBtn');
+        const editOrderBtn = document.getElementById('editOrderBtn');
+        const manageItemsBtn = document.getElementById('manageItemsBtn');
+        const manageUsersBtn = document.getElementById('manageUsersBtn');
+        const manageTablesBtn = document.getElementById('manageTablesBtn');
+        const settingsBtn = document.getElementById('settingsBtn');
+        const reportsBtn = document.getElementById('reportsBtn');
+        const reportsModal = document.getElementById('reportsModal');
+        const closeReportsBtn = document.getElementById('closeReports');
+        const startDateInput = document.getElementById('startDate');
+        const endDateInput = document.getElementById('endDate');
+        const reportCategoryFilter = document.getElementById('reportCategoryFilter');
+        const reportPaymentFilter = document.getElementById('reportPaymentFilter');
+        const generateReportBtn = document.getElementById('generateReport');
+        const exportReportBtn = document.getElementById('exportReport');
+        const salesTableBody = document.getElementById('salesTableBody');
+        const totalSalesElement = document.getElementById('totalSales');
+        const totalOrdersElement = document.getElementById('totalOrders');
+        const averageOrderElement = document.getElementById('averageOrder');
+        const printReportBtn = document.getElementById('printReport');
+        const searchInput = document.getElementById('searchInput');
+        const categoryTabs = document.querySelectorAll('.category-tab');
+        const discountTypeBtns = document.querySelectorAll('.discount-type-btn');
+        const paymentMethods = document.querySelectorAll('.payment-method');
+        const amountPaidInput = document.getElementById('amountPaid');
+        const cardAmountContainer = document.getElementById('cardAmountContainer');
+        const cardAmountInput = document.getElementById('cardAmount');
+        const changeAmountElement = document.getElementById('changeAmount');
+        const confirmPaymentBtn = document.getElementById('confirmPayment');
+        const cancelPaymentBtn = document.getElementById('cancelPayment');
+        const itemManagementModal = document.getElementById('itemManagementModal');
+        const itemModalTitle = document.getElementById('itemModalTitle');
+        const itemNameInput = document.getElementById('itemName');
+        const itemCategorySelect = document.getElementById('itemCategory');
+        const itemPriceInput = document.getElementById('itemPrice');
+        const itemDescriptionInput = document.getElementById('itemDescription');
+        const itemAvailabilitySelect = document.getElementById('itemAvailability');
+        const imagePreview = document.getElementById('imagePreview');
+        const itemImageInput = document.getElementById('itemImage');
+        const uploadImageBtn = document.getElementById('uploadImageBtn');
+        const saveItemBtn = document.getElementById('saveItem');
+        const cancelItemBtn = document.getElementById('cancelItem');
+        const deleteItemBtn = document.getElementById('deleteItem');
+        const userManagementModal = document.getElementById('userManagementModal');
+        const usersList = document.getElementById('usersList');
+        const addUserBtn = document.getElementById('addUserBtn');
+        const closeUserManagement = document.getElementById('closeUserManagement');
+        const userFormModal = document.getElementById('userFormModal');
+        const userModalTitle = document.getElementById('userModalTitle');
+        const userNameInput = document.getElementById('userName');
+        const userPasswordInput = document.getElementById('userPassword');
+        const userRoleSelect = document.getElementById('userRole');
+        const saveUserBtn = document.getElementById('saveUser');
+        const cancelUserForm = document.getElementById('cancelUserForm');
+        const deleteUserBtn = document.getElementById('deleteUser');
+        const tablesModal = document.getElementById('tablesModal');
+        const tablesGrid = document.getElementById('tablesGrid');
+        const newTableNumber = document.getElementById('newTableNumber');
+        const addTableBtn = document.getElementById('addTableBtn');
+        const closeTablesModal = document.getElementById('closeTablesModal');
+        const settingsModal = document.getElementById('settingsModal');
+        const settingsContent = document.getElementById('settingsContent');
+        const langEn = document.getElementById('langEn');
+        const langKm = document.getElementById('langKm');
+        const langZh = document.getElementById('langZh');
+        const storeLogoPreview = document.getElementById('storeLogoPreview');
+        const storeLogoInput = document.getElementById('storeLogoInput');
+        const uploadStoreLogo = document.getElementById('uploadStoreLogo');
+        const backupDataBtn = document.getElementById('backupData');
+        const restoreDataBtn = document.getElementById('restoreData');
+        const resetDataBtn = document.getElementById('resetData');
+        const closeSettings = document.getElementById('closeSettings');
+        const saveSettingsBtn = document.getElementById('saveSettings');
+        const keypadModal = document.getElementById('keypadModal');
+        const keypadInput = document.getElementById('keypadInput');
+        const keypadClear = document.getElementById('keypadClear');
+        const keypadEnter = document.getElementById('keypadEnter');
+        const openKeypadCash = document.getElementById('openKeypadCash');
+        const openKeypadCard = document.getElementById('openKeypadCard');
+        const storeLogo = document.getElementById('storeLogo');
+        const receiptLogo = document.getElementById('receiptLogo');
+        
+        // Initialize the app
+        function init() {
+            // Load language from settings
+            const settings = db.getSettings();
+            currentLanguage = settings.language || 'en';
+            updateLanguage();
+            
+            // Load store logo
+            if (settings.storeLogo) {
+                storeLogo.src = settings.storeLogo;
+                receiptLogo.src = settings.storeLogo;
+                storeLogoPreview.innerHTML = `<img src="${settings.storeLogo}" alt="Store Logo" style="max-width: 100%; max-height: 100%;">`;
+            }
+            
+            renderMenuItems();
+            renderUsers();
+            renderTables();
+            updateOrderSummary();
+            setupEventListeners();
+            
+            // Set default dates for reports
+            const today = new Date();
+            const oneWeekAgo = new Date();
+            oneWeekAgo.setDate(today.getDate() - 7);
+            
+            startDateInput.valueAsDate = oneWeekAgo;
+            endDateInput.valueAsDate = today;
+            
+            generateSalesReport();
+        }
+        
+        // Update language for all elements
+        function updateLanguage() {
+            const lang = translations[currentLanguage];
+            
+            // Update elements with data-i18n attribute
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (lang[key]) {
+                    el.textContent = lang[key];
+                }
+            });
+            
+            // Update placeholder texts
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                if (lang[key]) {
+                    el.setAttribute('placeholder', lang[key]);
+                }
+            });
+            
+            // Update active language button
+            document.querySelectorAll('.language-option').forEach(btn => {
+                btn.classList.remove('selected');
+                if (btn.dataset.lang === currentLanguage) {
+                    btn.classList.add('selected');
+                }
+            });
+            
+            // Save language preference
+            db.updateSettings({ language: currentLanguage });
+        }
+        
+        // Render menu items with search and category filtering
+        function renderMenuItems(category = 'all', searchQuery = '') {
+            menuItemsContainer.innerHTML = '';
+            
+            const menuItems = db.getMenuItems();
+            const filteredItems = menuItems.filter(item => {
+                const matchesCategory = category === 'all' || item.category === category;
+                const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                                     item.description.toLowerCase().includes(searchQuery.toLowerCase());
+                return matchesCategory && matchesSearch;
+            });
+            
+            if (filteredItems.length === 0) {
+                menuItemsContainer.innerHTML = `<p>${translations[currentLanguage].no_items_found || 'No items found matching your search.'}</p>`;
+                return;
+            }
+            
+            filteredItems.forEach(item => {
+                const menuItemElement = document.createElement('div');
+                menuItemElement.className = 'menu-item';
+                menuItemElement.dataset.id = item.id;
+                
+                menuItemElement.innerHTML = `
+                    ${item.image ? `<img src="${item.image}" class="menu-item-img" alt="${item.name}">` : '<div class="menu-item-img" style="background-color: #f5f5f5; display: flex; justify-content: center; align-items: center;"><i class="fas fa-image" style="font-size: 40px; color: #ccc;"></i></div>'}
+                    <h3>${item.name}</h3>
+                    <p>${item.description}</p>
+                    <div class="price">$${item.price.toFixed(2)}</div>
+                    <div class="availability ${item.available ? '' : 'unavailable'}">${item.available ? translations[currentLanguage].available : translations[currentLanguage].not_available}</div>
+                    <button class="add-btn" ${item.available ? '' : 'disabled'}>${translations[currentLanguage].add || 'Add'}</button>
+                `;
+                
+                menuItemsContainer.appendChild(menuItemElement);
+                
+                // Add event listener to the add button
+                const addBtn = menuItemElement.querySelector('.add-btn');
+                addBtn.addEventListener('click', () => addToOrder(item));
+                
+                // Add double click for editing
+                menuItemElement.addEventListener('dblclick', () => openEditItemModal(item.id));
+            });
+        }
+        
+        // Add item to order
+        function addToOrder(item) {
+            if (!item.available) {
+                alert(translations[currentLanguage].item_unavailable);
+                return;
+            }
+            
+            const existingItem = currentOrder.items.find(orderItem => orderItem.id === item.id);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                currentOrder.items.push({
+                    id: item.id,
+                    name: item.name,
+                    price: item.price,
+                    quantity: 1
+                });
+            }
+            
+            renderOrderItems();
+            updateOrderSummary();
+            
+            // Show notification
+            showNotification(`${item.name} ${translations[currentLanguage].item_added}`);
+        }
+        
+        // Show notification
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 2000);
+        }
+        
+        // Render order items
+        function renderOrderItems() {
+            orderItemsContainer.innerHTML = '';
+            
+            if (currentOrder.items.length === 0) {
+                orderItemsContainer.innerHTML = `<p>${translations[currentLanguage].no_items_in_order || 'No items added to order yet.'}</p>`;
+                return;
+            }
+            
+            currentOrder.items.forEach(item => {
+                const orderItemElement = document.createElement('div');
+                orderItemElement.className = 'order-item';
+                
+                orderItemElement.innerHTML = `
+                    <div class="item-name">${item.name}</div>
+                    <div class="item-price">$${(item.price * item.quantity).toFixed(2)}</div>
+                    <div class="item-quantity">
+                        <button class="quantity-btn minus">-</button>
+                        <input type="text" class="quantity-input" value="${item.quantity}" readonly>
+                        <button class="quantity-btn plus">+</button>
+                        <button class="remove-btn">×</button>
+                    </div>
+                `;
+                
+                orderItemsContainer.appendChild(orderItemElement);
+                
+                // Add event listeners to quantity buttons
+                const minusBtn = orderItemElement.querySelector('.minus');
+                const plusBtn = orderItemElement.querySelector('.plus');
+                const removeBtn = orderItemElement.querySelector('.remove-btn');
+                
+                minusBtn.addEventListener('click', () => updateQuantity(item.id, -1));
+                plusBtn.addEventListener('click', () => updateQuantity(item.id, 1));
+                removeBtn.addEventListener('click', () => removeItem(item.id));
+            });
+        }
+        
+        // Update item quantity
+        function updateQuantity(itemId, change) {
+            const item = currentOrder.items.find(item => item.id === itemId);
+            
+            if (item) {
+                item.quantity += change;
+                
+                if (item.quantity <= 0) {
+                    removeItem(itemId);
+                } else {
+                    renderOrderItems();
+                    updateOrderSummary();
+                }
+            }
+        }
+        
+        // Remove item from order
+        function removeItem(itemId) {
+            currentOrder.items = currentOrder.items.filter(item => item.id !== itemId);
+            renderOrderItems();
+            updateOrderSummary();
+        }
+        
+        // Update order summary
+        function updateOrderSummary() {
+            const subtotal = currentOrder.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            let discountAmount = currentOrder.discount;
+            
+            if (currentOrder.discountType === 'percentage') {
+                discountAmount = subtotal * (currentOrder.discount / 100);
+            }
+            
+            const tax = (subtotal - discountAmount) * 0.1; // 10% tax
+            const total = subtotal - discountAmount + tax;
+            
+            subtotalElement.textContent = `$${subtotal.toFixed(2)}`;
+            discountElement.textContent = `-$${discountAmount.toFixed(2)}`;
+            taxElement.textContent = `$${tax.toFixed(2)}`;
+            totalElement.textContent = `$${total.toFixed(2)}`;
+        }
+        
+        // Apply discount
+        function applyDiscount() {
+            const discountValue = parseFloat(discountValueInput.value);
+            
+            if (isNaN(discountValue)) {
+                alert(translations[currentLanguage].enter_valid_discount);
+                return;
+            }
+            
+            if (currentOrder.discountType === 'percentage' && (discountValue < 0 || discountValue > 100)) {
+                alert(translations[currentLanguage].percentage_range);
+                return;
+            }
+            
+            currentOrder.discount = discountValue;
+            updateOrderSummary();
+            discountValueInput.value = '';
+        }
+        
+        // Process payment
+        function processPayment() {
+            if (currentOrder.items.length === 0) {
+                alert(translations[currentLanguage].add_items_first);
+                return;
+            }
+            
+            if (currentOrder.orderType === 'dine-in' && !tableSelect.value) {
+                alert(translations[currentLanguage].select_table_first);
+                return;
+            }
+            
+            // Set order details
+            currentOrder.customer = customerSelect.value || translations[currentLanguage].walk_in || 'Walk-in';
+            currentOrder.table = tableSelect.value;
+            currentOrder.note = orderNoteInput.value;
+            currentOrder.date = new Date();
+            
+            // Show payment modal
+            paymentModal.style.display = 'flex';
+            
+            // Reset payment inputs
+            document.querySelector('input[name="paymentMethod"]:checked').checked = true;
+            amountPaidInput.value = '';
+            cardAmountInput.value = '';
+            changeAmountElement.style.display = 'none';
+            cardAmountContainer.style.display = 'none';
+        }
+        
+        // Calculate change
+        function calculateChange() {
+            const total = parseFloat(totalElement.textContent.replace('$', ''));
+            const amountPaid = parseFloat(amountPaidInput.value) || 0;
+            const cardAmount = parseFloat(cardAmountInput.value) || 0;
+            const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+            
+            let totalPaid = amountPaid;
+            
+            if (paymentMethod === 'mixed') {
+                totalPaid = amountPaid + cardAmount;
+            } else if (paymentMethod === 'card') {
+                totalPaid = cardAmount;
+            }
+            
+            if (totalPaid >= total) {
+                const change = totalPaid - total;
+                changeAmountElement.innerHTML = `<span data-i18n="change">${translations[currentLanguage].change}</span>: $${change.toFixed(2)}`;
+                changeAmountElement.style.display = 'block';
+            } else {
+                changeAmountElement.style.display = 'none';
+            }
+        }
+        
+        // Confirm payment
+        function confirmPayment() {
+            const total = parseFloat(totalElement.textContent.replace('$', ''));
+            const amountPaid = parseFloat(amountPaidInput.value) || 0;
+            const cardAmount = parseFloat(cardAmountInput.value) || 0;
+            const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+            
+            let totalPaid = amountPaid;
+            let paymentDetails = {};
+            
+            if (paymentMethod === 'mixed') {
+                if (amountPaid <= 0 || cardAmount <= 0) {
+                    alert(translations[currentLanguage].both_amounts);
+                    return;
+                }
+                
+                totalPaid = amountPaid + cardAmount;
+                paymentDetails = {
+                    method: 'mixed',
+                    cashAmount: amountPaid,
+                    cardAmount: cardAmount
+                };
+            } else if (paymentMethod === 'card') {
+                if (cardAmount <= 0) {
+                    alert(translations[currentLanguage].enter_card_amount);
+                    return;
+                }
+                
+                totalPaid = cardAmount;
+                paymentDetails = {
+                    method: 'card',
+                    cardAmount: cardAmount
+                };
+            } else {
+                if (amountPaid <= 0) {
+                    alert(translations[currentLanguage].enter_amount_paid);
+                    return;
+                }
+                
+                paymentDetails = {
+                    method: 'cash',
+                    cashAmount: amountPaid
+                };
+            }
+            
+            if (totalPaid < total) {
+                alert(translations[currentLanguage].amount_less);
+                return;
+            }
+            
+            // Set payment details
+            currentOrder.payment = paymentDetails;
+            
+            // Save the order to database
+            const sale = {
+                date: currentOrder.date.toISOString(),
+                customer: currentOrder.customer,
+                paymentMethod: paymentDetails.method,
+                items: currentOrder.items.map(item => item.name),
+                itemsData: currentOrder.items.map(item => ({ id: item.id, quantity: item.quantity })),
+                total: total,
+                orderType: currentOrder.orderType,
+                table: currentOrder.table
+            };
+            
+            db.saveSale(sale);
+            
+            // Update table status if dine-in
+            if (currentOrder.orderType === 'dine-in' && currentOrder.table) {
+                const tables = db.getTables();
+                const table = tables.find(t => t.number === currentOrder.table);
+                if (table) {
+                    table.status = 'unavailable';
+                    db.saveTable(table);
+                    renderTables();
+                }
+            }
+            
+            // Generate receipt
+            generateReceipt();
+            
+            // Hide payment modal and show receipt
+            paymentModal.style.display = 'none';
+            receiptModal.style.display = 'flex';
+        }
+        
+        // Generate receipt
+        function generateReceipt() {
+            receiptOrderNumberElement.textContent = currentOrder.orderNumber || orderNumberElement.textContent;
+            
+            // Format date
+            const options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+            receiptDateElement.textContent = currentOrder.date.toLocaleDateString(currentLanguage === 'zh' ? 'zh-CN' : currentLanguage, options);
+            
+            // Add items to receipt
+            receiptBody.innerHTML = '';
+            
+            currentOrder.items.forEach(item => {
+                const itemElement = document.createElement('div');
+                itemElement.className = 'receipt-item';
+                itemElement.innerHTML = `
+                    <span>${item.name} x${item.quantity}</span>
+                    <span>$${(item.price * item.quantity).toFixed(2)}</span>
+                `;
+                receiptBody.appendChild(itemElement);
+            });
+            
+            // Add totals to receipt
+            const subtotal = currentOrder.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            let discountAmount = currentOrder.discount;
+            
+            if (currentOrder.discountType === 'percentage') {
+                discountAmount = subtotal * (currentOrder.discount / 100);
+            }
+            
+            const tax = (subtotal - discountAmount) * 0.1;
+            const total = subtotal - discountAmount + tax;
+            
+            const subtotalElement = document.createElement('div');
+            subtotalElement.className = 'receipt-item';
+            subtotalElement.innerHTML = `
+                <span>${translations[currentLanguage].subtotal}</span>
+                <span>$${subtotal.toFixed(2)}</span>
+            `;
+            receiptBody.appendChild(subtotalElement);
+            
+            if (discountAmount > 0) {
+                const discountElement = document.createElement('div');
+                discountElement.className = 'receipt-item';
+                discountElement.innerHTML = `
+                    <span>${translations[currentLanguage].discount} ${currentOrder.discountType === 'percentage' ? `(${currentOrder.discount}%)` : ''}</span>
+                    <span>-$${discountAmount.toFixed(2)}</span>
+                `;
+                receiptBody.appendChild(discountElement);
+            }
+            
+            const taxElement = document.createElement('div');
+            taxElement.className = 'receipt-item';
+            taxElement.innerHTML = `
+                <span>${translations[currentLanguage].tax}</span>
+                <span>$${tax.toFixed(2)}</span>
+            `;
+            receiptBody.appendChild(taxElement);
+            
+            const totalElement = document.createElement('div');
+            totalElement.className = 'receipt-item receipt-total';
+            totalElement.innerHTML = `
+                <span>${translations[currentLanguage].total}</span>
+                <span>$${total.toFixed(2)}</span>
+            `;
+            receiptBody.appendChild(totalElement);
+            
+            // Add payment details
+            const paymentElement = document.createElement('div');
+            paymentElement.className = 'receipt-item';
+            
+            let paymentText = '';
+            if (currentOrder.payment.method === 'cash') {
+                paymentText = `${translations[currentLanguage].paid}: $${currentOrder.payment.cashAmount.toFixed(2)} (${translations[currentLanguage].cash})`;
+                if (currentOrder.payment.cashAmount > total) {
+                    paymentText += `<br>${translations[currentLanguage].change}: $${(currentOrder.payment.cashAmount - total).toFixed(2)}`;
+                }
+            } else if (currentOrder.payment.method === 'card') {
+                paymentText = `${translations[currentLanguage].paid}: $${currentOrder.payment.cardAmount.toFixed(2)} (${translations[currentLanguage].bank_transfer})`;
+            } else {
+                paymentText = `${translations[currentLanguage].paid}: $${(currentOrder.payment.cashAmount + currentOrder.payment.cardAmount).toFixed(2)} (${translations[currentLanguage].mixed_payment}: ${translations[currentLanguage].cash} $${currentOrder.payment.cashAmount.toFixed(2)} + ${translations[currentLanguage].bank_transfer} $${currentOrder.payment.cardAmount.toFixed(2)})`;
+            }
+            
+            paymentElement.innerHTML = paymentText;
+            receiptBody.appendChild(paymentElement);
+            
+            // Add customer note if exists
+            if (currentOrder.note) {
+                const noteElement = document.createElement('div');
+                noteElement.className = 'receipt-item';
+                noteElement.style.marginTop = '10px';
+                noteElement.innerHTML = `
+                    <span><strong>${translations[currentLanguage].note}:</strong> ${currentOrder.note}</span>
+                `;
+                receiptBody.appendChild(noteElement);
+            }
+            
+            // Add table information if dine-in
+            if (currentOrder.orderType === 'dine-in' && currentOrder.table) {
+                const tableElement = document.createElement('div');
+                tableElement.className = 'receipt-item';
+                tableElement.innerHTML = `
+                    <span><strong>${translations[currentLanguage].table}:</strong> ${currentOrder.table}</span>
+                `;
+                receiptBody.appendChild(tableElement);
+            }
+            
+            // Add order type
+            const typeElement = document.createElement('div');
+            typeElement.className = 'receipt-item';
+            typeElement.innerHTML = `
+                <span><strong>${translations[currentLanguage].orderType || 'Order Type'}:</strong> ${translations[currentLanguage][currentOrder.orderType] || currentOrder.orderType}</span>
+            `;
+            receiptBody.appendChild(typeElement);
+            
+            // Add thank you message
+            const thankYouElement = document.createElement('div');
+            thankYouElement.className = 'receipt-item';
+            thankYouElement.style.textAlign = 'center';
+            thankYouElement.style.marginTop = '15px';
+            thankYouElement.style.fontWeight = 'bold';
+            thankYouElement.innerHTML = `
+                <span>${translations[currentLanguage].thank_you || 'Thank you for your visit!'}</span>
+            `;
+            receiptBody.appendChild(thankYouElement);
+        }
+        
+        // Print receipt
+        function printReceipt() {
+            const printContent = `
+                <div style="text-align: center; font-family: Arial, sans-serif; max-width: 300px; margin: 0 auto;">
+                    <h2 style="color: #4a6bff;">${translations[currentLanguage].restaurant_pos}</h2>
+                    <p>${translations[currentLanguage].order} ${receiptOrderNumberElement.textContent}</p>
+                    <p>${receiptDateElement.textContent}</p>
+                    <hr style="border-top: 1px dashed #333; margin: 10px 0;">
+                    ${Array.from(receiptBody.children).map(child => child.outerHTML).join('')}
+                </div>
+            `;
+            
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(printContent);
+            printWindow.document.close();
+            printWindow.focus();
+            printWindow.print();
+            printWindow.close();
+        }
+        
+        // Generate sales report
+        function generateSalesReport() {
+            const startDate = new Date(startDateInput.value);
+            const endDate = new Date(endDateInput.value);
+            const categoryFilter = reportCategoryFilter.value;
+            const paymentFilter = reportPaymentFilter.value;
+            
+            // Filter sales data by date range and filters
+            const filteredSales = db.getSalesData().filter(sale => {
+                const saleDate = new Date(sale.date);
+                const matchesDate = saleDate >= startDate && saleDate <= endDate;
+                
+                let matchesCategory = true;
+                if (categoryFilter !== 'all') {
+                    const menuItems = db.getMenuItems();
+                    matchesCategory = sale.itemsData.some(item => {
+                        const menuItem = menuItems.find(mi => mi.id === item.id);
+                        return menuItem && menuItem.category === categoryFilter;
+                    });
+                }
+                
+                let matchesPayment = true;
+                if (paymentFilter !== 'all') {
+                    matchesPayment = sale.paymentMethod === paymentFilter;
+                }
+                
+                return matchesDate && matchesCategory && matchesPayment;
+            });
+            
+            // Update summary cards
+            const totalSales = filteredSales.reduce((sum, sale) => sum + sale.total, 0);
+            const totalOrders = filteredSales.length;
+            const averageOrder = totalOrders > 0 ? totalSales / totalOrders : 0;
+            
+            totalSalesElement.textContent = `$${totalSales.toFixed(2)}`;
+            totalOrdersElement.textContent = totalOrders;
+            averageOrderElement.textContent = `$${averageOrder.toFixed(2)}`;
+            
+            // Update sales table
+            salesTableBody.innerHTML = '';
+            
+            filteredSales.forEach(sale => {
+                const row = document.createElement('tr');
+                
+                let paymentMethod = '';
+                if (sale.paymentMethod === 'cash') {
+                    paymentMethod = translations[currentLanguage].cash;
+                } else if (sale.paymentMethod === 'card') {
+                    paymentMethod = translations[currentLanguage].bank_transfer;
+                } else {
+                    paymentMethod = translations[currentLanguage].mixed_payment;
+                }
+                
+                row.innerHTML = `
+                    <td>${sale.orderNumber}</td>
+                    <td>${new Date(sale.date).toLocaleDateString()}</td>
+                    <td>${sale.customer}</td>
+                    <td>${paymentMethod}</td>
+                    <td>${sale.items.join(', ')}</td>
+                    <td>$${sale.total.toFixed(2)}</td>
+                `;
+                salesTableBody.appendChild(row);
+            });
+        }
+        
+        // Export report to CSV
+        function exportReportToCSV() {
+            const startDate = new Date(startDateInput.value);
+            const endDate = new Date(endDateInput.value);
+            const categoryFilter = reportCategoryFilter.value;
+            const paymentFilter = reportPaymentFilter.value;
+            
+            // Filter sales data by date range and filters
+            const filteredSales = db.getSalesData().filter(sale => {
+                const saleDate = new Date(sale.date);
+                const matchesDate = saleDate >= startDate && saleDate <= endDate;
+                
+                let matchesCategory = true;
+                if (categoryFilter !== 'all') {
+                    const menuItems = db.getMenuItems();
+                    matchesCategory = sale.itemsData.some(item => {
+                        const menuItem = menuItems.find(mi => mi.id === item.id);
+                        return menuItem && menuItem.category === categoryFilter;
+                    });
+                }
+                
+                let matchesPayment = true;
+                if (paymentFilter !== 'all') {
+                    matchesPayment = sale.paymentMethod === paymentFilter;
+                }
+                
+                return matchesDate && matchesCategory && matchesPayment;
+            });
+            
+            // Create CSV content
+            let csvContent = "Order #,Date,Customer,Payment Method,Items,Total\n";
+            
+            filteredSales.forEach(sale => {
+                let paymentMethod = '';
+                if (sale.paymentMethod === 'cash') {
+                    paymentMethod = translations[currentLanguage].cash;
+                } else if (sale.paymentMethod === 'card') {
+                    paymentMethod = translations[currentLanguage].bank_transfer;
+                } else {
+                    paymentMethod = translations[currentLanguage].mixed_payment;
+                }
+                
+                csvContent += `${sale.orderNumber},"${new Date(sale.date).toLocaleDateString()}","${sale.customer}","${paymentMethod}","${sale.items.join(', ')}",${sale.total.toFixed(2)}\n`;
+            });
+            
+            // Create download link
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `sales_report_${startDateInput.value}_to_${endDateInput.value}.csv`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+        
+        // Print report
+        function printReport() {
+            const printContent = `
+                <div style="font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto;">
+                    <h1 style="color: #4a6bff; text-align: center;">${translations[currentLanguage].sales_reports}</h1>
+                    <p style="text-align: center;">
+                        ${new Date(startDateInput.value).toLocaleDateString()} ${translations[currentLanguage].to} ${new Date(endDateInput.value).toLocaleDateString()}
+                    </p>
+                    
+                    <div style="display: flex; justify-content: space-between; margin: 20px 0;">
+                        <div style="text-align: center; background-color: #f8f9fa; padding: 15px; border-radius: 5px; flex: 1; margin: 0 5px;">
+                            <h3 style="font-size: 14px; color: #495057; margin-bottom: 5px;">${translations[currentLanguage].total_sales}</h3>
+                            <p style="font-size: 20px; font-weight: bold; color: #4a6bff;">${totalSalesElement.textContent}</p>
+                        </div>
+                        <div style="text-align: center; background-color: #f8f9fa; padding: 15px; border-radius: 5px; flex: 1; margin: 0 5px;">
+                            <h3 style="font-size: 14px; color: #495057; margin-bottom: 5px;">${translations[currentLanguage].total_orders}</h3>
+                            <p style="font-size: 20px; font-weight: bold; color: #4a6bff;">${totalOrdersElement.textContent}</p>
+                        </div>
+                        <div style="text-align: center; background-color: #f8f9fa; padding: 15px; border-radius: 5px; flex: 1; margin: 0 5px;">
+                            <h3 style="font-size: 14px; color: #495057; margin-bottom: 5px;">${translations[currentLanguage].average_order}</h3>
+                            <p style="font-size: 20px; font-weight: bold; color: #4a6bff;">${averageOrderElement.textContent}</p>
+                        </div>
+                    </div>
+                    
+                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+                        <thead>
+                            <tr style="background-color: #f8f9fa;">
+                                <th style="border: 1px solid #e9ecef; padding: 8px; text-align: left;">${translations[currentLanguage].order}</th>
+                                <th style="border: 1px solid #e9ecef; padding: 8px; text-align: left;">${translations[currentLanguage].date}</th>
+                                <th style="border: 1px solid #e9ecef; padding: 8px; text-align: left;">${translations[currentLanguage].customer}</th>
+                                <th style="border: 1px solid #e9ecef; padding: 8px; text-align: left;">${translations[currentLanguage].payment_method}</th>
+                                <th style="border: 1px solid #e9ecef; padding: 8px; text-align: left;">${translations[currentLanguage].items}</th>
+                                <th style="border: 1px solid #e9ecef; padding: 8px; text-align: left;">${translations[currentLanguage].total}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${Array.from(salesTableBody.children).map(row => row.outerHTML).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+            
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(printContent);
+            printWindow.document.close();
+            printWindow.focus();
+            printWindow.print();
+            printWindow.close();
+        }
+        
+        // Create new order
+        function createNewOrder() {
+            // Reset current order
+            currentOrder = {
+                items: [],
+                customer: "",
+                table: "",
+                orderType: "dine-in",
+                discount: 0,
+                discountType: "amount",
+                note: "",
+                date: new Date(),
+                orderNumber: db.generateOrderNumber()
+            };
+            
+            // Reset UI
+            orderItemsContainer.innerHTML = `<p>${translations[currentLanguage].no_items_in_order || 'No items added to order yet.'}</p>`;
+            customerSelect.value = '';
+            tableSelect.value = '';
+            dineInBtn.classList.add('active');
+            takeawayBtn.classList.remove('active');
+            tableSelect.style.display = 'block';
+            discountValueInput.value = '';
+            orderNoteInput.value = '';
+            document.querySelector('.discount-type-btn.active').classList.remove('active');
+            document.querySelector('.discount-type-btn[data-type="amount"]').classList.add('active');
+            updateOrderSummary();
+            orderNumberElement.textContent = currentOrder.orderNumber;
+        }
+        
+        // Open item management modal for adding new item
+        function openAddItemModal() {
+            currentItem = null;
+            itemModalTitle.textContent = translations[currentLanguage].add_new_item;
+            itemNameInput.value = '';
+            itemCategorySelect.value = 'food';
+            itemPriceInput.value = '';
+            itemDescriptionInput.value = '';
+            itemAvailabilitySelect.value = 'true';
+            imagePreview.innerHTML = '<i class="fas fa-image" style="font-size: 40px; color: #ccc;"></i>';
+            deleteItemBtn.style.display = 'none';
+            itemManagementModal.style.display = 'flex';
+        }
+        
+        // Open item management modal for editing existing item
+        function openEditItemModal(itemId) {
+            const item = db.getMenuItems().find(item => item.id === itemId);
+            if (!item) return;
+            
+            currentItem = item;
+            itemModalTitle.textContent = translations[currentLanguage].edit_item || 'Edit Item';
+            itemNameInput.value = item.name;
+            itemCategorySelect.value = item.category;
+            itemPriceInput.value = item.price;
+            itemDescriptionInput.value = item.description;
+            itemAvailabilitySelect.value = item.available.toString();
+            
+            if (item.image) {
+                imagePreview.innerHTML = `<img src="${item.image}" alt="${item.name}" style="max-width: 100%; max-height: 100%;">`;
+            } else {
+                imagePreview.innerHTML = '<i class="fas fa-image" style="font-size: 40px; color: #ccc;"></i>';
+            }
+            
+            deleteItemBtn.style.display = 'block';
+            itemManagementModal.style.display = 'flex';
+        }
+        
+        // Save item (add new or update existing)
+        function saveItem() {
+            const name = itemNameInput.value.trim();
+            const category = itemCategorySelect.value;
+            const price = parseFloat(itemPriceInput.value);
+            const description = itemDescriptionInput.value.trim();
+            const available = itemAvailabilitySelect.value === 'true';
+            
+            if (!name || isNaN(price)) {
+                alert(translations[currentLanguage].fill_required);
+                return;
+            }
+            
+            // Get image (in a real app, you would upload this to a server)
+            const image = currentItem?.image || '';
+            
+            const item = {
+                name,
+                category,
+                price,
+                description,
+                available,
+                image
+            };
+            
+            if (currentItem) {
+                item.id = currentItem.id;
+                item.image = currentItem.image; // Preserve existing image if not changed
+            }
+            
+            // Handle image upload
+            if (itemImageInput.files && itemImageInput.files[0]) {
+                const file = itemImageInput.files[0];
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    item.image = e.target.result;
+                    db.saveMenuItem(item);
+                    
+                    // Refresh menu display
+                    const activeCategory = document.querySelector('.category-tab.active').dataset.category;
+                    const searchQuery = searchInput.value;
+                    renderMenuItems(activeCategory, searchQuery);
+                    
+                    // Close modal
+                    itemManagementModal.style.display = 'none';
+                };
+                reader.readAsDataURL(file);
+            } else {
+                db.saveMenuItem(item);
+                
+                // Refresh menu display
+                const activeCategory = document.querySelector('.category-tab.active').dataset.category;
+                const searchQuery = searchInput.value;
+                renderMenuItems(activeCategory, searchQuery);
+                
+                // Close modal
+                itemManagementModal.style.display = 'none';
+            }
+        }
+        
+        // Delete item
+        function deleteItem() {
+            if (!currentItem) return;
+            
+            if (confirm(translations[currentLanguage].confirm_delete)) {
+                db.deleteMenuItem(currentItem.id);
+                
+                // Refresh menu display
+                const activeCategory = document.querySelector('.category-tab.active').dataset.category;
+                const searchQuery = searchInput.value;
+                renderMenuItems(activeCategory, searchQuery);
+                
+                // Close modal
+                itemManagementModal.style.display = 'none';
+            }
+        }
+        
+        // Render users list
+        function renderUsers() {
+            usersList.innerHTML = '';
+            
+            const users = db.getUsers();
+            
+            if (users.length === 0) {
+                usersList.innerHTML = `<p>${translations[currentLanguage].no_users_found || 'No users found.'}</p>`;
+                return;
+            }
+            
+            users.forEach(user => {
+                const userElement = document.createElement('div');
+                userElement.className = 'user-item';
+                userElement.dataset.id = user.id;
+                
+                userElement.innerHTML = `
+                    <div>
+                        <strong>${user.username}</strong> (${translations[currentLanguage][user.role] || user.role})
+                    </div>
+                    <div class="user-actions">
+                        <button class="user-action-btn edit-btn" data-i18n="edit">${translations[currentLanguage].edit || 'Edit'}</button>
+                        <button class="user-action-btn delete-btn" data-i18n="delete">${translations[currentLanguage].delete || 'Delete'}</button>
+                    </div>
+                `;
+                
+                usersList.appendChild(userElement);
+                
+                // Add event listeners
+                const editBtn = userElement.querySelector('.edit-btn');
+                const deleteBtn = userElement.querySelector('.delete-btn');
+                
+                editBtn.addEventListener('click', () => openEditUserModal(user.id));
+                deleteBtn.addEventListener('click', () => deleteUser(user.id));
+            });
+        }
+        
+        // Open add user modal
+        function openAddUserModal() {
+            currentUser = null;
+            userModalTitle.textContent = translations[currentLanguage].add_user;
+            userNameInput.value = '';
+            userPasswordInput.value = '';
+            userRoleSelect.value = 'cashier';
+            deleteUserBtn.style.display = 'none';
+            userFormModal.style.display = 'flex';
+        }
+        
+        // Open edit user modal
+        function openEditUserModal(userId) {
+            const user = db.getUsers().find(u => u.id === userId);
+            if (!user) return;
+            
+            currentUser = user;
+            userModalTitle.textContent = translations[currentLanguage].edit_user || 'Edit User';
+            userNameInput.value = user.username;
+            userPasswordInput.value = '';
+            userRoleSelect.value = user.role;
+            deleteUserBtn.style.display = 'block';
+            userFormModal.style.display = 'flex';
+        }
+        
+        // Save user (add new or update existing)
+        function saveUser() {
+            const username = userNameInput.value.trim();
+            const password = userPasswordInput.value.trim();
+            const role = userRoleSelect.value;
+            
+            if (!username || (!currentUser && !password)) {
+                alert(translations[currentLanguage].fill_required);
+                return;
+            }
+            
+            const user = {
+                username,
+                role
+            };
+            
+            if (password) {
+                user.password = password;
+            }
+            
+            if (currentUser) {
+                user.id = currentUser.id;
+                if (!password) {
+                    user.password = currentUser.password; // Preserve existing password if not changed
+                }
+            }
+            
+            db.saveUser(user);
+            renderUsers();
+            userFormModal.style.display = 'none';
+        }
+        
+        // Delete user
+        function deleteUser(userId) {
+            if (confirm(translations[currentLanguage].confirm_delete_user)) {
+                db.deleteUser(userId);
+                renderUsers();
+                userFormModal.style.display = 'none';
+            }
+        }
+        
+        // Render tables
+        function renderTables() {
+            tablesGrid.innerHTML = '';
+            tableSelect.innerHTML = '<option value="" data-i18n="select_table">Select Table</option>';
+            
+            const tables = db.getTables();
+            
+            tables.forEach(table => {
+                // Add to tables grid in modal
+                const tableElement = document.createElement('div');
+                tableElement.className = `table-item ${table.status}`;
+                tableElement.dataset.id = table.id;
+                
+                tableElement.innerHTML = `
+                    <div style="margin-bottom: 5px;">${translations[currentLanguage].table} ${table.number}</div>
+                    <div style="margin-bottom: 10px; font-weight: bold;">${translations[currentLanguage][table.status]}</div>
+                    <div>
+                        <button class="user-action-btn ${table.status === 'available' ? 'delete-btn' : 'edit-btn'}" style="margin-bottom: 5px;">
+                            ${table.status === 'available' ? translations[currentLanguage].mark_unavailable : translations[currentLanguage].mark_available}
+                        </button>
+                        <button class="user-action-btn delete-btn">${translations[currentLanguage].delete || 'Delete'}</button>
+                    </div>
+                `;
+                
+                tablesGrid.appendChild(tableElement);
+                
+                // Add event listeners
+                const statusBtn = tableElement.querySelector('.edit-btn, .delete-btn:first-of-type');
+                const deleteBtn = tableElement.querySelector('.delete-btn:last-of-type');
+                
+                statusBtn.addEventListener('click', () => toggleTableStatus(table.id));
+                deleteBtn.addEventListener('click', () => deleteTable(table.id));
+                
+                // Add to table select dropdown
+                const option = document.createElement('option');
+                option.value = table.number;
+                option.textContent = `${translations[currentLanguage].table} ${table.number}`;
+                option.dataset.status = table.status;
+                tableSelect.appendChild(option);
+            });
+        }
+        
+        // Add new table
+        function addTable() {
+            const number = newTableNumber.value.trim();
+            
+            if (!number) {
+                alert(translations[currentLanguage].fill_required);
+                return;
+            }
+            
+            const table = {
+                number,
+                status: 'available'
+            };
+            
+            db.saveTable(table);
+            renderTables();
+            newTableNumber.value = '';
+        }
+        
+        // Toggle table status
+        function toggleTableStatus(tableId) {
+            const tables = db.getTables();
+            const table = tables.find(t => t.id === tableId);
+            
+            if (table) {
+                table.status = table.status === 'available' ? 'unavailable' : 'available';
+                db.saveTable(table);
+                renderTables();
+            }
+        }
+        
+        // Delete table
+        function deleteTable(tableId) {
+            if (confirm(translations[currentLanguage].confirm_delete_table)) {
+                db.deleteTable(tableId);
+                renderTables();
+            }
+        }
+        
+        // Handle keypad input
+        function handleKeypadInput(value) {
+            if (value === '.' && keypadInput.value.includes('.')) return;
+            
+            if (value === 'clear') {
+                keypadInput.value = '';
+            } else if (value === 'enter') {
+                if (currentKeypadTarget === 'cash') {
+                    amountPaidInput.value = keypadInput.value || '0';
+                } else if (currentKeypadTarget === 'card') {
+                    cardAmountInput.value = keypadInput.value || '0';
+                }
+                keypadModal.style.display = 'none';
+                calculateChange();
+            } else {
+                keypadInput.value += value;
+            }
+        }
+        
+        // Update store logo
+        function updateStoreLogo() {
+            if (storeLogoInput.files && storeLogoInput.files[0]) {
+                const file = storeLogoInput.files[0];
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const logoUrl = e.target.result;
+                    storeLogo.src = logoUrl;
+                    receiptLogo.src = logoUrl;
+                    storeLogoPreview.innerHTML = `<img src="${logoUrl}" alt="Store Logo" style="max-width: 100%; max-height: 100%;">`;
+                    db.updateSettings({ storeLogo: logoUrl });
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+        
+        // Backup data
+        function backupData() {
+            db.backupData();
+            showNotification(translations[currentLanguage].backup_success || 'Data backup successful');
+        }
+        
+        // Restore data
+        function restoreData() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            
+            input.onchange = e => {
+                const file = e.target.files[0];
+                if (file) {
+                    db.restoreData(file)
+                        .then(() => {
+                            showNotification(translations[currentLanguage].restore_success || 'Data restore successful');
+                            // Refresh the page to load restored data
+                            setTimeout(() => location.reload(), 1500);
+                        })
+                        .catch(error => {
+                            alert(translations[currentLanguage].restore_error || 'Error restoring data: ' + error.message);
+                        });
+                }
+            };
+            
+            input.click();
+        }
+        
+        // Reset data
+        function resetData() {
+            if (confirm(translations[currentLanguage].confirm_reset)) {
+                db.resetData();
+                showNotification(translations[currentLanguage].reset_success || 'Data reset successful');
+                // Refresh the page to load initial data
+                setTimeout(() => location.reload(), 1500);
+            }
+        }
+        
+        // Setup event listeners
+        function setupEventListeners() {
+            // Search functionality
+            searchInput.addEventListener('input', () => {
+                const searchQuery = searchInput.value;
+                const activeCategory = document.querySelector('.category-tab.active').dataset.category;
+                renderMenuItems(activeCategory, searchQuery);
+            });
+            
+            // Discount type buttons
+            discountTypeBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    discountTypeBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentOrder.discountType = btn.dataset.type;
+                });
+            });
+            
+            // Apply discount
+            applyDiscountBtn.addEventListener('click', applyDiscount);
+            
+            // Process payment
+            paymentBtn.addEventListener('click', processPayment);
+            
+            // Order type buttons
+            dineInBtn.addEventListener('click', () => {
+                currentOrder.orderType = 'dine-in';
+                dineInBtn.classList.add('active');
+                takeawayBtn.classList.remove('active');
+                tableSelect.style.display = 'block';
+            });
+            
+            takeawayBtn.addEventListener('click', () => {
+                currentOrder.orderType = 'takeaway';
+                takeawayBtn.classList.add('active');
+                dineInBtn.classList.remove('active');
+                tableSelect.style.display = 'none';
+                currentOrder.table = '';
+            });
+            
+            // Payment method selection
+            paymentMethods.forEach(method => {
+                method.addEventListener('click', () => {
+                    paymentMethods.forEach(m => m.classList.remove('selected'));
+                    method.classList.add('selected');
+                    
+                    if (method.dataset.method === 'mixed') {
+                        cardAmountContainer.style.display = 'block';
+                    } else if (method.dataset.method === 'card') {
+                        cardAmountContainer.style.display = 'block';
+                        amountPaidInput.value = '';
+                    } else {
+                        cardAmountContainer.style.display = 'none';
+                        cardAmountInput.value = '';
+                    }
+                });
+            });
+            
+            // Calculate change when payment amounts change
+            amountPaidInput.addEventListener('input', calculateChange);
+            cardAmountInput.addEventListener('input', calculateChange);
+            
+            // Open keypad for cash amount
+            openKeypadCash.addEventListener('click', () => {
+                currentKeypadTarget = 'cash';
+                keypadInput.value = amountPaidInput.value;
+                keypadModal.style.display = 'flex';
+            });
+            
+            // Open keypad for card amount
+            openKeypadCard.addEventListener('click', () => {
+                currentKeypadTarget = 'card';
+                keypadInput.value = cardAmountInput.value;
+                keypadModal.style.display = 'flex';
+            });
+            
+            // Keypad buttons
+            document.querySelectorAll('.keypad-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    if (btn.classList.contains('clear')) {
+                        handleKeypadInput('clear');
+                    } else if (btn.classList.contains('enter')) {
+                        handleKeypadInput('enter');
+                    } else {
+                        handleKeypadInput(btn.dataset.value);
+                    }
+                });
+            });
+            
+            // Confirm payment
+            confirmPaymentBtn.addEventListener('click', confirmPayment);
+            
+            // Cancel payment
+            cancelPaymentBtn.addEventListener('click', () => {
+                paymentModal.style.display = 'none';
+            });
+            
+            // Print receipt
+            printReceiptBtn.addEventListener('click', printReceipt);
+            
+            // Close receipt modal
+            closeReceiptBtn.addEventListener('click', () => {
+                receiptModal.style.display = 'none';
+                createNewOrder();
+            });
+            
+            // New order
+            newOrderBtn.addEventListener('click', createNewOrder);
+            
+            // Edit order (in this case, just allow editing items)
+            editOrderBtn.addEventListener('click', () => {
+                alert(translations[currentLanguage].edit_order_message || 'You can now edit the order by adjusting quantities or removing items.');
+            });
+            
+            // Manage items
+            manageItemsBtn.addEventListener('click', openAddItemModal);
+            
+            // Manage users
+            manageUsersBtn.addEventListener('click', () => {
+                userManagementModal.style.display = 'flex';
+            });
+            
+            // Add user
+            addUserBtn.addEventListener('click', openAddUserModal);
+            
+            // Close user management
+            closeUserManagement.addEventListener('click', () => {
+                userManagementModal.style.display = 'none';
+            });
+            
+            // Save user
+            saveUserBtn.addEventListener('click', saveUser);
+            
+            // Cancel user form
+            cancelUserForm.addEventListener('click', () => {
+                userFormModal.style.display = 'none';
+            });
+            
+            // Delete user
+            deleteUserBtn.addEventListener('click', () => {
+                if (currentUser) deleteUser(currentUser.id);
+            });
+            
+            // Manage tables
+            manageTablesBtn.addEventListener('click', () => {
+                tablesModal.style.display = 'flex';
+            });
+            
+            // Add table
+            addTableBtn.addEventListener('click', addTable);
+            
+            // Close tables modal
+            closeTablesModal.addEventListener('click', () => {
+                tablesModal.style.display = 'none';
+            });
+            
+            // Settings
+            settingsBtn.addEventListener('click', () => {
+                settingsModal.style.display = 'flex';
+            });
+            
+            // Language selection
+            langEn.addEventListener('click', () => {
+                currentLanguage = 'en';
+                updateLanguage();
+            });
+            
+            langKm.addEventListener('click', () => {
+                currentLanguage = 'km';
+                updateLanguage();
+            });
+            
+            langZh.addEventListener('click', () => {
+                currentLanguage = 'zh';
+                updateLanguage();
+            });
+            
+            // Upload store logo
+            uploadStoreLogo.addEventListener('click', () => {
+                storeLogoInput.click();
+            });
+            
+            storeLogoInput.addEventListener('change', updateStoreLogo);
+            
+            // Backup data
+            backupDataBtn.addEventListener('click', backupData);
+            
+            // Restore data
+            restoreDataBtn.addEventListener('click', restoreData);
+            
+            // Reset data
+            resetDataBtn.addEventListener('click', resetData);
+            
+            // Close settings
+            closeSettings.addEventListener('click', () => {
+                settingsModal.style.display = 'none';
+            });
+            
+            // Save settings
+            saveSettingsBtn.addEventListener('click', () => {
+                settingsModal.style.display = 'none';
+                showNotification(translations[currentLanguage].settings_saved || 'Settings saved');
+            });
+            
+            // Show reports
+            reportsBtn.addEventListener('click', () => {
+                reportsModal.style.display = 'flex';
+            });
+            
+            // Close reports modal
+            closeReportsBtn.addEventListener('click', () => {
+                reportsModal.style.display = 'none';
+            });
+            
+            // Generate report
+            generateReportBtn.addEventListener('click', generateSalesReport);
+            
+            // Export report
+            exportReportBtn.addEventListener('click', exportReportToCSV);
+            
+            // Print report
+            printReportBtn.addEventListener('click', printReport);
+            
+            // Category tabs
+            categoryTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    categoryTabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    const searchQuery = searchInput.value;
+                    renderMenuItems(tab.dataset.category, searchQuery);
+                });
+            });
+            
+            // Item management
+            uploadImageBtn.addEventListener('click', () => {
+                itemImageInput.click();
+            });
+            
+            itemImageInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        imagePreview.innerHTML = `<img src="${event.target.result}" alt="Preview" style="max-width: 100%; max-height: 100%;">`;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+            
+            saveItemBtn.addEventListener('click', saveItem);
+            cancelItemBtn.addEventListener('click', () => {
+                itemManagementModal.style.display = 'none';
+            });
+            deleteItemBtn.addEventListener('click', deleteItem);
+        }
+        
+        // Initialize the app
+        init();
+    </script>
+</body>
+</html>
